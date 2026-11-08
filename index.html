@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مساحتي | Personal Workspace</title>
+<style>
+:root{--bg:#f3f7fc;--panel:#fff;--panel2:#eaf2fb;--blue:#4a86c7;--blue-dark:#2f5f9e;--ink:#1f2e44;--muted:#7587a0;--line:#e1e9f3;--shadow:none}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.6}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:236px;background:#fff;border-left:1px solid var(--line);padding:26px 16px;position:fixed;right:0;top:0;bottom:0;z-index:5;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:11px;margin:0 8px 28px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.brand-mark{width:38px;height:38px;border-radius:11px;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:19px;font-weight:bold}
+.brand strong{font-size:17px;display:block}
+.brand small{color:var(--muted);font-size:11px}
+.nav-label{font-size:11px;color:var(--muted);margin:20px 12px 8px}
+.nav button{width:100%;text-align:right;background:transparent;color:#51637d;padding:11px 13px;border-radius:10px;margin:2px 0;display:flex;align-items:center;gap:12px;font-size:13px}
+.nav button .ico{width:20px;text-align:center;font-size:15px}
+.nav button:hover{background:var(--bg)}
+.nav button.active{background:var(--panel2);color:var(--blue-dark);font-weight:bold}
+.side-bottom{margin-top:auto;background:var(--panel2);padding:14px;border-radius:12px;font-size:12px;color:var(--blue-dark);line-height:1.8}
+.side-bottom .who{word-break:break-all;font-size:11px;color:var(--muted);direction:ltr;text-align:right}
+.side-bottom .sync{margin:2px 0 8px;font-size:11px}
+.side-bottom .btn{width:100%;padding:7px 10px;font-size:12px}
+.main{margin-right:236px;width:calc(100% - 236px);padding:30px 40px 50px;max-width:1500px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.eyebrow{color:var(--blue-dark);font-size:12px;font-weight:bold}
+.topbar h1{font-size:24px;margin:6px 0 0}
+.date-chip{background:#fff;border:1px solid var(--line);padding:9px 14px;border-radius:10px;color:var(--muted);font-size:12px}
+.page{display:none}.page.active{display:block}
+.welcome{background:#fff;border:1px solid var(--line);border-right:4px solid var(--blue);border-radius:14px;padding:24px 28px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;box-shadow:var(--shadow)}
+.welcome h2{font-size:21px;margin:6px 0 8px}
+.welcome p{margin:0;color:var(--muted);font-size:13px}
+.welcome .welcome-icon{font-size:42px;color:var(--blue);opacity:.35}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.stat{padding:18px}
+.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}
+.stat-icon{width:30px;height:30px;border-radius:9px;background:var(--panel2);color:var(--blue-dark);display:grid;place-items:center}
+.stat strong{display:block;font-size:26px;margin:12px 0 2px;color:var(--blue-dark)}
+.stat small{color:var(--muted);font-size:11px}
+.two-col{display:grid;grid-template-columns:1.3fr .7fr;gap:16px}
+.panel{padding:20px;margin-bottom:16px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.panel-head h3{margin:0;font-size:15px}
+.muted{color:var(--muted);font-size:11px}
+.progress{height:8px;background:var(--panel2);border-radius:20px;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--blue);border-radius:20px;transition:width .3s}
+.progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:12px 0 4px}
+.quick-add{display:flex;gap:8px}
+.field{width:100%;border:1px solid var(--line);background:#fafcff;border-radius:10px;padding:10px 12px;color:var(--ink);outline:none;font-size:13px}
+.field:focus{border-color:var(--blue);background:#fff}
+.btn{background:var(--blue);color:#fff;border-radius:10px;padding:10px 16px;font-size:13px;white-space:nowrap}
+.btn:hover{background:var(--blue-dark)}
+.btn-light{background:var(--panel2);color:var(--blue-dark)}
+.btn-light:hover{background:#dce9f7}
+.task{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px}
+.task:last-child{border:0}
+.task input{accent-color:var(--blue);width:17px;height:17px}
+.task.done .task-name{text-decoration:line-through;color:#a3b0c2}
+.task-name{flex:1}
+.tag{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--panel2);color:var(--blue-dark)}
+.tag.high{background:#fdeceb;color:#b4524b}
+.tag.medium{background:#fff4de;color:#9a7220}
+.tag.low{background:#e8f5ee;color:#3e8660}
+.empty{padding:26px;text-align:center;color:var(--muted);font-size:13px}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:0 0 18px}
+.section-title h2{font-size:20px;margin:0}
+.section-title p{font-size:13px;color:var(--muted);margin:5px 0 0}
+.task-list{background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 18px}
+.task-meta{font-size:11px;color:var(--muted)}
+.delete{background:transparent;color:#a9b6c8;font-size:18px;padding:2px 6px;border-radius:6px}
+.delete:hover{color:#c0504a;background:#fdeceb}
+.form-grid{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:9px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.cards,.idea-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.mini-card,.idea{background:#fff;border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:12px;padding:16px}
+.mini-card h3,.idea h3{font-size:14px;margin:0 0 8px}
+.mini-card p{font-size:12px;color:var(--muted);line-height:1.7;margin:0}
+.mini-card .card-foot{display:flex;justify-content:space-between;margin-top:14px;padding-top:10px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+.idea{min-height:120px}
+.idea p{font-size:12px;color:var(--muted);line-height:1.8;white-space:pre-wrap;margin:8px 0 0}
+.mini-card .delete,.idea .delete{float:left}
+.notes-area{min-height:320px;resize:vertical;line-height:1.9}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{background:#fff;border:1px solid var(--line);border-radius:10px;min-height:84px;padding:8px;font-size:12px}
+.day.head{background:transparent;border:0;min-height:auto;color:var(--muted);text-align:center}
+.day.today{border-color:var(--blue);background:var(--panel2)}
+.day small{display:block;color:var(--blue-dark);margin-top:8px;line-height:1.5}
+.month-nav{display:flex;gap:8px}
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}
+.day-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:right;display:flex;flex-direction:column;gap:3px;box-shadow:var(--shadow);color:var(--ink)}
+.day-card:hover{border-color:var(--blue);background:var(--panel2)}
+.day-card.today{border:2px solid var(--blue)}
+.dc-num{font-size:22px;font-weight:bold;color:var(--blue-dark)}
+.dc-wd{font-size:12px;color:var(--muted)}
+.dc-count{font-size:12px;margin-top:6px}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}.cards,.idea-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.sidebar{width:68px;padding:16px 8px}.brand{justify-content:center;margin:0 0 20px;padding-bottom:16px}.brand>div:last-child,.nav-label,.nav button .nav-text,.side-bottom{display:none}.nav button{justify-content:center;padding:13px 5px}.main{margin-right:68px;width:calc(100% - 68px);padding:20px 14px}.topbar h1{font-size:19px}.welcome{padding:18px}.welcome h2{font-size:17px}.welcome .welcome-icon{display:none}.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:22px}.form-grid{grid-template-columns:1fr 1fr}.form-grid .wide{grid-column:1/-1}.cards,.idea-grid{grid-template-columns:1fr}.date-chip{display:none}.calendar-grid{gap:3px}.day{min-height:60px;padding:5px;font-size:10px}}
+.form-grid.five{grid-template-columns:2fr 1fr 1fr 1fr auto}
+.chips{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:var(--panel2);color:var(--blue-dark);border-radius:20px;padding:6px 14px;font-size:12px}
+.chip.on{background:var(--blue);color:#fff}
+.chip-sel{width:auto;padding:6px 10px;margin-right:auto}
+.opt-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}
+.opt-row:last-child{border:0}
+.opt-row .field{width:auto;min-width:200px}
+.opt-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--blue)}
+.swatches{display:flex;gap:8px}
+.swatch{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)}
+.swatch.on{box-shadow:0 0 0 2px var(--blue-dark)}
+.btn-danger{background:#fdeceb;color:#b4524b}.btn-danger:hover{background:#f9d9d6}
+.task.edit{display:block}
+.edit-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+.edit-grid .wide{grid-column:1/-1}
+.edit-actions{display:flex;gap:8px;flex-wrap:wrap}
+.task-note{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.edit-btn{background:transparent;color:#a9b6c8;font-size:14px;padding:2px 6px;border-radius:6px}
+.edit-btn:hover{color:var(--blue-dark);background:var(--panel2)}
+@media(max-width:700px){.form-grid.five,.edit-grid{grid-template-columns:1fr 1fr}.opt-row{flex-direction:column;align-items:stretch}.opt-row .field{width:100%}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== تسجيل الدخول ===== */
+body:not(.authed) .app{display:none}
+body.authed #authScreen{display:none}
+#authScreen{position:fixed;inset:0;background:var(--bg);display:grid;place-items:center;padding:20px;z-index:50}
+.auth-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px 28px;width:100%;max-width:380px}
+.auth-card .brand{margin:0 0 22px;padding-bottom:18px}
+.auth-card h2{font-size:18px;margin:0 0 4px}
+.auth-card p.sub{margin:0 0 18px;color:var(--muted);font-size:13px}
+.auth-card .field{margin-bottom:10px;direction:ltr;text-align:left}
+.auth-card .btn{width:100%;padding:11px}
+.auth-or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin:14px 0}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:var(--line)}
+.auth-links{display:flex;justify-content:space-between;margin-top:14px;font-size:12px}
+.auth-links button{background:none;color:var(--blue-dark);padding:0;font-size:12px}
+.auth-links button:hover{text-decoration:underline}
+.auth-msg{font-size:12px;border-radius:8px;padding:9px 12px;margin-bottom:12px;display:none;line-height:1.7}
+.auth-msg.err{display:block;background:#fdeceb;color:#b4524b}
+.auth-msg.ok{display:block;background:#e8f5ee;color:#3e8660}
+.auth-msg.info{display:block;background:var(--panel2);color:var(--blue-dark)}
+</style>
+</head>
+<body>
+
+<!-- شاشة تسجيل الدخول -->
+<div id="authScreen">
+ <div class="auth-card">
+  <div class="brand"><div class="brand-mark">م</div><div><strong>مساحتي</strong><small>PERSONAL WORKSPACE</small></div></div>
+  <div id="authLoading" class="empty">جارٍ التحميل...</div>
+  <form id="authForm" style="display:none" onsubmit="return authSubmit(event)">
+   <h2 id="authTitle">تسجيل الدخول</h2>
+   <p class="sub" id="authSub">ادخل عشان بياناتك تتحفظ وتفتحها من أي جهاز.</p>
+   <div class="auth-msg" id="authMsg"></div>
+   <input class="field" id="authEmail" type="email" placeholder="البريد الإلكتروني" autocomplete="email" required>
+   <input class="field" id="authPass" type="password" placeholder="كلمة المرور (6 حروف على الأقل)" autocomplete="current-password" required minlength="6">
+   <button class="btn" id="authBtn" type="submit">دخول</button>
+   <div class="auth-or">أو</div>
+   <button class="btn btn-light" type="button" onclick="authGoogle()">الدخول بحساب Google</button>
+   <div class="auth-links"><button type="button" id="authToggle" onclick="authToggle()">معنديش حساب؟ إنشاء حساب</button><button type="button" onclick="authReset()">نسيت كلمة المرور</button></div>
+  </form>
+ </div>
+</div>
+
+<div class="app">
+<aside class="sidebar">
+ <div class="brand"><div class="brand-mark">م</div><div><strong>مساحتي</strong><small>PERSONAL WORKSPACE</small></div></div>
+ <div class="nav-label">مساحة العمل</div>
+ <nav class="nav">
+  <button class="active" data-page="dashboard"><span class="ico">⌂</span><span class="nav-text">لوحة التحكم</span></button>
+  <button data-page="monthly"><span class="ico">▦</span><span class="nav-text">الشهر والأيام</span></button>
+  <div class="nav-label">الإدارة والتطوير</div>
+  <button data-page="projects"><span class="ico">◫</span><span class="nav-text">المشاريع</span></button>
+  <button data-page="marketing"><span class="ico">◉</span><span class="nav-text">مساحة التسويق</span></button>
+  <button data-page="ideas"><span class="ico">✧</span><span class="nav-text">بنك الأفكار</span></button>
+  <button data-page="notes"><span class="ico">▤</span><span class="nav-text">الملاحظات</span></button>
+  <div class="nav-label">تخصيص</div>
+  <button data-page="settings"><span class="ico">⚙</span><span class="nav-text">الإعدادات</span></button>
+ </nav>
+ <div class="side-bottom">
+  <div class="who" id="whoEmail"></div>
+  <div class="sync" id="syncState">☁ متزامن</div>
+  <button class="btn btn-light" style="background:#fff" onclick="logout()">تسجيل الخروج</button>
+ </div>
+</aside>
+<main class="main">
+ <header class="topbar"><div><div class="eyebrow">مساحة عملك الشخصية</div><h1 id="pageTitle">صباح الإنجاز 👋</h1></div><div class="date-chip" id="todayLabel"></div></header>
+ <section class="page active" id="dashboard">
+  <div class="stats">
+   <div class="stat"><div class="stat-top"><span>مهام اليوم</span><span class="stat-icon">✓</span></div><strong id="todayCount">0</strong><small>مهام مسجلة لليوم</small></div>
+   <div class="stat"><div class="stat-top"><span>مهام مكتملة</span><span class="stat-icon">◉</span></div><strong id="doneCount">0</strong><small>إنجازاتك حتى الآن</small></div>
+   <div class="stat"><div class="stat-top"><span>أهداف الشهر</span><span class="stat-icon">▦</span></div><strong id="monthCount">0</strong><small>أهداف في خطتك الحالية</small></div>
+   <div class="stat"><div class="stat-top"><span>المشاريع</span><span class="stat-icon">◫</span></div><strong id="projectCount">0</strong><small>مشاريع قيد المتابعة</small></div>
+  </div>
+  <div class="two-col">
+   <div class="panel"><div class="panel-head"><h3>مهام اليوم</h3><button class="btn btn-light" onclick="openDay(today())">عرض الكل</button></div><div id="dashTasks"></div></div>
+   <div class="panel"><div class="panel-head"><h3>تقدم الشهر</h3><span class="muted" id="monthPercent">0%</span></div><div class="progress"><span id="monthBar" style="width:0%"></span></div><div class="progress-row"><span>المهام المكتملة</span><span id="monthProgressText">0 من 0</span></div><div style="height:1px;background:var(--line);margin:20px 0"></div><div class="panel-head"><h3>إضافة سريعة</h3><span class="muted">سجّل اللي في بالك</span></div><div class="quick-add"><input id="quickTask" class="field" placeholder="اكتب مهمة جديدة..."><button class="btn" onclick="quickAdd()">إضافة</button></div></div>
+  </div>
+ </section>
+ <section class="page" id="monthly">
+  <div class="section-title" id="monthHead"><div><h2 id="calendarTitle"></h2><p>اختار يوم عشان تدخل جواه وتضيف مهامه.</p></div><div class="month-nav"><button class="btn btn-light" onclick="changeMonth(-1)">السابق</button><button class="btn btn-light" onclick="changeMonth(1)">التالي</button></div></div>
+  <div id="monthView"><div class="panel"><div class="panel-head"><h3>تقدم الشهر</h3><span class="muted" id="mText"></span></div><div class="progress"><span id="mBar" style="width:0%"></span></div></div><div class="day-grid" id="monthDays"></div></div>
+  <div id="dayView" style="display:none"><div class="panel"><div class="panel-head"><h3 id="dayTitle"></h3><button class="btn btn-light" onclick="closeDay()">رجوع للشهر</button></div><div class="form-grid five"><input class="field wide" id="dayTask" placeholder="إيه المهمة في اليوم ده؟"><select class="field" id="dayCat"></select><select class="field" id="dayPriority"><option value="medium">متوسطة</option><option value="high">عالية</option><option value="low">منخفضة</option></select><input class="field" id="dayTime" type="time"><button class="btn" onclick="addDayTask()">إضافة</button></div><div class="chips" id="dayChips"></div><div class="task-list" id="dayList"></div></div></div>
+ </section>
+ <section class="page" id="projects">
+  <div class="section-title"><div><h2>المشاريع</h2><p>تابع المشاريع والأعمال اللي بتشتغل عليها.</p></div></div>
+  <div class="panel"><div class="form-grid"><input class="field wide" id="projectName" placeholder="اسم المشروع"><input class="field" id="projectDesc" placeholder="وصف مختصر"><select class="field" id="projectStatus"><option>قيد التنفيذ</option><option>مخطط له</option><option>مكتمل</option></select><button class="btn" onclick="addProject()">إضافة</button></div><div class="cards" id="projectCards"></div></div>
+ </section>
+ <section class="page" id="marketing">
+  <div class="section-title"><div><h2>مساحة التسويق</h2><p>خطط للحملات والمحتوى والأفكار التسويقية في مكان واحد.</p></div></div>
+  <div class="panel"><div class="form-grid"><input class="field wide" id="campaignName" placeholder="اسم الحملة أو فكرة المحتوى"><select class="field" id="campaignType"><option>حملة تسويقية</option><option>محتوى سوشيال ميديا</option><option>بحث وتحليل</option><option>خطة استراتيجية</option></select><input class="field" id="campaignDate" type="date"><button class="btn" onclick="addCampaign()">إضافة</button></div><div class="cards" id="campaignCards"></div></div>
+ </section>
+ <section class="page" id="ideas">
+  <div class="section-title"><div><h2>بنك الأفكار</h2><p>ما تسيبش فكرة كويسة تضيع؛ خزّنها وارجعلها وقت ما تحتاج.</p></div></div>
+  <div class="panel"><div class="form-grid"><input class="field wide" id="ideaTitle" placeholder="عنوان الفكرة"><select class="field" id="ideaCategory"><option>تسويق</option><option>مشروع</option><option>تطوير شخصي</option><option>أخرى</option></select><input class="field" id="ideaBody" placeholder="وصف مختصر للفكرة"><button class="btn" onclick="addIdea()">حفظ الفكرة</button></div><div class="idea-grid" id="ideaGrid"></div></div>
+ </section>
+ <section class="page" id="notes">
+  <div class="section-title"><div><h2>الملاحظات</h2><p>مساحة حرة للتفكير والكتابة وتسجيل أي تفاصيل مهمة.</p></div><button class="btn" onclick="saveNotes()">حفظ الملاحظات</button></div>
+  <div class="panel"><textarea class="field notes-area" id="notesText" placeholder="اكتب ملاحظاتك هنا... أفكار، اجتماعات، نقاط مهمة، أو أي شيء محتاج تفتكره."></textarea><div class="muted" style="margin-top:10px" id="saveStatus">اضغط حفظ وملاحظاتك هتتخزن في حسابك.</div></div>
+ </section>
+<section class="page" id="settings">
+  <div class="section-title"><div><h2>الإعدادات</h2><p>خصّص المساحة على مزاجك.</p></div></div>
+  <div class="panel"><div class="panel-head"><h3>الحساب</h3></div>
+   <div class="opt-row"><label>مسجّل دخول بـ <span id="whoEmail2" dir="ltr"></span></label><button class="btn btn-light" onclick="logout()">تسجيل الخروج</button></div></div>
+  <div class="panel"><div class="panel-head"><h3>الشكل</h3></div>
+   <div class="opt-row"><label>درجة الأزرق</label><div class="swatches" id="swatches"></div></div>
+   <div class="opt-row"><label>حجم الخط</label><select class="field" id="setSize" onchange="setOpt('size',this.value)"><option value="0.92">صغير</option><option value="1">عادي</option><option value="1.1">كبير</option></select></div></div>
+  <div class="panel"><div class="panel-head"><h3>الأيام والمهام</h3></div>
+   <div class="opt-row"><label>إخفاء الأيام اللي عدّت من الشهر الحالي</label><input type="checkbox" id="setHide" onchange="setOpt('hidePast',this.checked)"></div>
+   <div class="opt-row"><label>إظهار المهام المنجزة</label><input type="checkbox" id="setDone" onchange="setOpt('showDone',this.checked)"></div>
+   <div class="opt-row"><label>التصنيفات (افصل بينها بفاصلة)</label><input class="field" id="setCats" onchange="setOpt('cats',this.value)"></div></div>
+  <div class="panel"><div class="panel-head"><h3>بياناتك</h3></div>
+   <div class="opt-row"><label>نسخة احتياطية من كل بياناتك</label><div class="chips" style="margin:0"><button class="btn btn-light" onclick="exportData()">تصدير</button><label class="btn btn-light" style="cursor:pointer">استيراد<input type="file" accept=".json" hidden onchange="importData(this)"></label></div></div>
+   <div class="opt-row"><label>مسح كل بياناتك (من الحساب كمان)</label><button class="btn btn-danger" onclick="resetAll()">مسح</button></div></div>
+ </section>
+</main>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const read=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('workspace_'+k))??d}catch{return d}};
+const write=(k,v)=>{localStorage.setItem('workspace_'+k,JSON.stringify(v));if(window.cloudSave)window.cloudSave()};
+let tasks=read('tasks'),projects=read('projects'),campaigns=read('campaigns'),ideas=read('ideas'),calendarDate=new Date();
+const today=()=>new Date().toISOString().slice(0,10);
+const dateText=d=>new Date(d+'T12:00:00').toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
+$('todayLabel').textContent=dateText(today());
+$('notesText').value=localStorage.getItem('workspace_notes')||'';
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(p).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));const names={dashboard:'صباح الإنجاز 👋',monthly:'الشهر والأيام',settings:'الإعدادات',projects:'المشاريع',marketing:'مساحة التسويق',ideas:'بنك الأفكار',notes:'الملاحظات'};$('pageTitle').textContent=names[p];}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{closeDay();showPage(b.dataset.page)}));
+function quickAdd(){let title=$('quickTask').value.trim();if(!title)return;tasks.push({id:Date.now(),title,type:'daily',date:today(),priority:'medium',done:false});write('tasks',tasks);$('quickTask').value='';render();}
+function toggleTask(id){tasks=tasks.map(t=>t.id===id?{...t,done:!t.done}:t);write('tasks',tasks);render();}
+function removeTask(id){tasks=tasks.filter(t=>t.id!==id);write('tasks',tasks);render();}
+function renderTasks(){let ym=today().slice(0,7),month=tasks.filter(t=>t.date.startsWith(ym)),day=tasks.filter(t=>t.date===today());$('dashTasks').innerHTML=day.length?day.slice(0,5).map(taskHTML).join(''):'<div class="empty">مفيش مهام لليوم حتى الآن. ابدأ بخطوة صغيرة.</div>';let done=month.filter(t=>t.done).length,pct=month.length?Math.round(done/month.length*100):0;$('todayCount').textContent=day.length;$('doneCount').textContent=day.filter(t=>t.done).length;$('monthCount').textContent=month.length;$('monthPercent').textContent=pct+'%';$('monthBar').style.width=pct+'%';$('monthProgressText').textContent=done+' من '+month.length;}
+function addProject(){let name=$('projectName').value.trim();if(!name)return;projects.push({id:Date.now(),name,desc:$('projectDesc').value,status:$('projectStatus').value});write('projects',projects);$('projectName').value='';$('projectDesc').value='';render();}
+function removeProject(id){projects=projects.filter(x=>x.id!==id);write('projects',projects);render();}
+function addCampaign(){let name=$('campaignName').value.trim();if(!name)return;campaigns.push({id:Date.now(),name,type:$('campaignType').value,date:$('campaignDate').value});write('campaigns',campaigns);$('campaignName').value='';render();}
+function removeCampaign(id){campaigns=campaigns.filter(x=>x.id!==id);write('campaigns',campaigns);render();}
+function addIdea(){let title=$('ideaTitle').value.trim();if(!title)return;ideas.push({id:Date.now(),title,cat:$('ideaCategory').value,body:$('ideaBody').value});write('ideas',ideas);$('ideaTitle').value='';$('ideaBody').value='';render();}
+function removeIdea(id){ideas=ideas.filter(x=>x.id!==id);write('ideas',ideas);render();}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderCards(){ $('projectCount').textContent=projects.length;$('projectCards').innerHTML=projects.length?projects.map(p=>`<div class="mini-card"><button class="delete" onclick="removeProject(${p.id})">×</button><h3>${esc(p.name)}</h3><p>${esc(p.desc||'لا يوجد وصف مضاف بعد.')}</p><div class="card-foot"><span>${esc(p.status)}</span><span>مشروع</span></div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">أضف مشروعك الأول عشان تبدأ تتابع تقدمه.</div>';$('campaignCards').innerHTML=campaigns.length?campaigns.map(c=>`<div class="mini-card"><button class="delete" onclick="removeCampaign(${c.id})">×</button><h3>${esc(c.name)}</h3><p>${esc(c.type)}</p><div class="card-foot"><span>${c.date||'بدون موعد محدد'}</span><span>تسويق</span></div></div>`).join(''):'<div class="empty" style="grid-column:1/-1">ابدأ بتسجيل أول حملة أو فكرة محتوى.</div>';$('ideaGrid').innerHTML=ideas.length?ideas.map(i=>`<div class="idea"><button class="delete" onclick="removeIdea(${i.id})">×</button><h3>${esc(i.title)}</h3><span class="tag">${esc(i.cat)}</span><p>${esc(i.body)}</p></div>`).join(''):'<div class="empty" style="grid-column:1/-1">بنك الأفكار فاضي ومستني أفكارك.</div>';}
+function saveNotes(){localStorage.setItem('workspace_notes',$('notesText').value);$('saveStatus').textContent='تم حفظ ملاحظاتك في حسابك ✓';if(window.cloudSave)window.cloudSave();}
+let selectedDay=null;
+const pad=n=>String(n).padStart(2,'0');
+function openDay(d){selectedDay=d;calendarDate=new Date(d+'T12:00:00');showPage('monthly');render();}
+function closeDay(){selectedDay=null;render();}
+function addDayTask(){let title=$('dayTask').value.trim();if(!title||!selectedDay)return;tasks.push({id:Date.now(),title,type:'daily',date:selectedDay,priority:$('dayPriority').value,time:$('dayTime').value,cat:$('dayCat').value,done:false});write('tasks',tasks);$('dayTask').value='';render();}
+function changeMonth(n){calendarDate.setDate(1);calendarDate.setMonth(calendarDate.getMonth()+n);renderMonth();}
+function renderMonth(){let y=calendarDate.getFullYear(),m=calendarDate.getMonth(),n=new Date(y,m+1,0).getDate(),ym=y+'-'+pad(m+1);
+$('monthView').style.display=selectedDay?'none':'block';$('dayView').style.display=selectedDay?'block':'none';$('monthHead').style.display=selectedDay?'none':'flex';
+$('calendarTitle').textContent=calendarDate.toLocaleDateString('ar-EG',{month:'long',year:'numeric'});
+let mt=tasks.filter(t=>t.date.startsWith(ym)),md=mt.filter(t=>t.done).length,p=mt.length?Math.round(md/mt.length*100):0;
+$('mBar').style.width=p+'%';$('mText').textContent=md+' من '+mt.length+' مهمة ('+p+'%)';
+let h='';for(let d=1;d<=n;d++){let ds=ym+'-'+pad(d),l=tasks.filter(t=>t.date===ds),dn=l.filter(t=>t.done).length,wd=new Date(ds+'T12:00:00').toLocaleDateString('ar-EG',{weekday:'long'});if(settings.hidePast&&ym===today().slice(0,7)&&ds<today())continue;h+=`<button class="day-card ${ds===today()?'today':''}" onclick="openDay('${ds}')"><span class="dc-num">${d}</span><span class="dc-wd">${wd}</span><span class="dc-count">${l.length?dn+' / '+l.length+' مهمة':'فاضي'}</span></button>`}
+$('monthDays').innerHTML=h;if(selectedDay)renderDay();}
+const DEFAULT_SETTINGS={accent:'blue',size:'1',hidePast:false,showDone:true,cats:'شغل,شخصي,تسويق,دراسة'};
+let settings={...DEFAULT_SETTINGS,...read('settings',{})};
+let editingId=null,dayFilter='all',dayCat='';
+const cats=()=>['عام',...settings.cats.split(/[,،]/).map(x=>x.trim()).filter(Boolean)];
+const PRI=[['medium','متوسطة'],['high','عالية'],['low','منخفضة']];
+const opts=(list,v)=>list.map(x=>{let a=Array.isArray(x)?x:[x,x];return `<option value="${esc(a[0])}" ${a[0]===v?'selected':''}>${esc(a[1])}</option>`}).join('');
+function taskHTML(t){if(t.id===editingId)return editHTML(t);return `<div class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})"><span class="task-name">${esc(t.title)}${t.note?`<span class="task-note">${esc(t.note)}</span>`:''}</span>${t.time?`<span class="task-meta">${t.time}</span>`:''}${t.cat&&t.cat!=='عام'?`<span class="tag">${esc(t.cat)}</span>`:''}<span class="tag ${t.priority}">${t.priority==='high'?'عالية':t.priority==='low'?'منخفضة':'متوسطة'}</span><button class="edit-btn" onclick="editTask(${t.id})" title="تعديل">✎</button><button class="delete" onclick="removeTask(${t.id})" title="حذف">×</button></div>`}
+function editHTML(t){let c=cats();if(t.cat&&!c.includes(t.cat))c.push(t.cat);return `<div class="task edit"><div class="edit-grid"><input class="field wide" id="eTitle" value="${esc(t.title)}"><input class="field" id="eDate" type="date" value="${t.date}"><select class="field" id="ePri">${opts(PRI,t.priority)}</select><select class="field" id="eCat">${opts(c,t.cat||'عام')}</select><input class="field" id="eTime" type="time" value="${t.time||''}"><textarea class="field wide" id="eNote" rows="2" placeholder="ملاحظة (اختياري)">${esc(t.note||'')}</textarea></div><div class="edit-actions"><button class="btn" onclick="saveEdit(${t.id})">حفظ</button><button class="btn btn-light" onclick="editTask(null)">إلغاء</button><button class="btn btn-light" onclick="moveTask(${t.id},1)">انقلها لبكرة</button></div></div>`}
+function editTask(id){editingId=id;render();}
+function saveEdit(id){tasks=tasks.map(t=>t.id===id?{...t,title:$('eTitle').value.trim()||t.title,date:$('eDate').value||t.date,priority:$('ePri').value,cat:$('eCat').value,time:$('eTime').value,note:$('eNote').value.trim()}:t);write('tasks',tasks);editingId=null;render();}
+function moveTask(id,n){let t=tasks.find(x=>x.id===id),d=new Date(t.date+'T12:00:00');d.setDate(d.getDate()+n);t.date=d.toISOString().slice(0,10);write('tasks',tasks);editingId=null;render();}
+function setFilter(k){dayFilter=k;render();}
+function setCatFilter(v){dayCat=v;render();}
+function renderDay(){$('dayTitle').textContent=dateText(selectedDay);let all=tasks.filter(t=>t.date===selectedDay).sort((a,b)=>(a.time||'99').localeCompare(b.time||'99')),l=all.filter(t=>(dayFilter==='all'||(dayFilter==='done')===t.done)&&(!dayCat||(t.cat||'عام')===dayCat)&&(settings.showDone||!t.done));
+$('dayChips').innerHTML=[['all','الكل'],['open','متبقي'],['done','منجز']].map(([k,n])=>`<button class="chip ${dayFilter===k?'on':''}" onclick="setFilter('${k}')">${n}</button>`).join('')+`<select class="field chip-sel" onchange="setCatFilter(this.value)"><option value="">كل التصنيفات</option>${opts(cats(),dayCat)}</select>`;
+$('dayList').innerHTML=l.length?l.map(taskHTML).join(''):`<div class="empty">${all.length?'مفيش مهام بالفلتر ده.':'اليوم فاضي. أضف أول مهمة.'}</div>`;}
+function applySettings(){const P={blue:['#4a86c7','#2f5f9e','#eaf2fb','#f3f7fc'],sky:['#3aa0c9','#23769c','#e6f4fa','#f2f9fc'],indigo:['#5b78c7','#3b53a0','#ebeffb','#f4f6fc'],slate:['#6b8299','#435a70','#ebf0f4','#f5f7f9']},p=P[settings.accent]||P.blue,r=document.documentElement.style;r.setProperty('--blue',p[0]);r.setProperty('--blue-dark',p[1]);r.setProperty('--panel2',p[2]);r.setProperty('--bg',p[3]);document.body.style.zoom=settings.size;
+$('swatches').innerHTML=Object.keys(P).map(k=>`<button class="swatch ${settings.accent===k?'on':''}" style="background:${P[k][0]}" onclick="setOpt('accent','${k}')"></button>`).join('');$('setSize').value=settings.size;$('setHide').checked=!!settings.hidePast;$('setDone').checked=settings.showDone!==false;$('setCats').value=settings.cats;$('dayCat').innerHTML=opts(cats(),'عام');}
+function setOpt(k,v){settings[k]=v;write('settings',settings);applySettings();render();}
+function exportData(){let d={tasks,projects,campaigns,ideas,notes:$('notesText').value,settings},a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='workspace-backup.json';a.click();}
+function importData(i){let f=i.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);['tasks','projects','campaigns','ideas','settings'].forEach(k=>{if(d[k])localStorage.setItem('workspace_'+k,JSON.stringify(d[k]))});if(d.notes!=null)localStorage.setItem('workspace_notes',d.notes);loadState();if(window.cloudSave)window.cloudSave();alert('تم الاستيراد ✓')}catch{alert('الملف ده مش نسخة احتياطية صالحة.')}};r.readAsText(f);}
+function resetAll(){if(confirm('هتتمسح كل بياناتك من الجهاز ومن حسابك. متأكد؟')){Object.keys(localStorage).filter(k=>k.startsWith('workspace_')).forEach(k=>localStorage.removeItem(k));loadState();if(window.cloudSave)window.cloudSave()}}
+function render(){renderTasks();renderCards();renderMonth();}
+// إعادة تحميل الحالة كلها من localStorage (بتتنادى بعد تسجيل الدخول/الخروج)
+function loadState(){tasks=read('tasks');projects=read('projects');campaigns=read('campaigns');ideas=read('ideas');settings={...DEFAULT_SETTINGS,...read('settings',{})};$('notesText').value=localStorage.getItem('workspace_notes')||'';selectedDay=null;editingId=null;applySettings();render();showPage('dashboard');}
+$('quickTask').addEventListener('keydown',e=>{if(e.key==='Enter')quickAdd()});$('dayTask').addEventListener('keydown',e=>{if(e.key==='Enter')addDayTask()});
+applySettings();render();
+</script>
+
+<script type="module">
+/* ============================================================
+   إعدادات Firebase — الصق هنا الإعدادات بتاعتك (firebaseConfig)
+   من: Firebase Console > Project settings > Your apps > Web app
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyA9BtI9zNc_JMmKdhnHbfg1P3j0RdCF4Pc",
+  authDomain: "work-32f47.firebaseapp.com",
+  projectId: "work-32f47",
+  storageBucket: "work-32f47.firebasestorage.app",
+  messagingSenderId: "208545864345",
+  appId: "1:208545864345:web:5bc4cac6c0c4e41ae1b608",
+  measurementId: "G-0J3NBKKZH8"
+};
+
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut,GoogleAuthProvider,signInWithPopup,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const $=id=>document.getElementById(id);
+const KEYS=['tasks','projects','campaigns','ideas','settings'];
+let mode='in', user=null, saveTimer=null, dirty=false;
+
+function msg(text,type='err'){const m=$('authMsg');m.className='auth-msg '+type;m.textContent=text;if(!text)m.className='auth-msg'}
+function showForm(){$('authLoading').style.display='none';$('authForm').style.display='block'}
+
+if(firebaseConfig.apiKey.startsWith('PASTE')){
+  showForm();
+  msg('لسه محطتش إعدادات Firebase. افتح الملف والصق firebaseConfig في الجزء اللي فوق السكريبت.','info');
+  $('authBtn').disabled=true;
+  throw new Error('Firebase config missing');
+}
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+auth.languageCode='ar';
+
+const ERR={
+ 'auth/invalid-email':'البريد الإلكتروني غير صحيح.',
+ 'auth/invalid-credential':'البريد أو كلمة المرور غلط.',
+ 'auth/wrong-password':'البريد أو كلمة المرور غلط.',
+ 'auth/user-not-found':'البريد أو كلمة المرور غلط.',
+ 'auth/email-already-in-use':'البريد ده مسجّل قبل كده. جرّب تسجيل الدخول.',
+ 'auth/weak-password':'كلمة المرور ضعيفة، لازم 6 حروف على الأقل.',
+ 'auth/too-many-requests':'محاولات كتير. استنى شوية وجرّب تاني.',
+ 'auth/network-request-failed':'مفيش اتصال بالإنترنت.',
+ 'auth/popup-closed-by-user':'اتقفلت نافذة Google قبل ما تكمل.',
+ 'auth/popup-blocked':'المتصفح منع نافذة Google. اسمح بالنوافذ المنبثقة.',
+ 'auth/unauthorized-domain':'الدومين ده مش مضاف في Firebase (Authentication > Settings > Authorized domains).',
+ 'auth/operation-not-allowed':'طريقة الدخول دي مش مفعّلة في Firebase Console.',
+ 'auth/missing-password':'اكتب كلمة المرور.'
+};
+const errText=e=>ERR[e.code]||('حصل خطأ: '+(e.code||e.message));
+
+window.authToggle=()=>{
+  mode=mode==='in'?'up':'in';
+  $('authTitle').textContent=mode==='in'?'تسجيل الدخول':'إنشاء حساب';
+  $('authBtn').textContent=mode==='in'?'دخول':'إنشاء الحساب';
+  $('authToggle').textContent=mode==='in'?'معنديش حساب؟ إنشاء حساب':'عندي حساب؟ تسجيل الدخول';
+  $('authPass').autocomplete=mode==='in'?'current-password':'new-password';
+  msg('');
+};
+window.authSubmit=async e=>{
+  e.preventDefault();msg('');
+  const email=$('authEmail').value.trim(),pass=$('authPass').value;
+  $('authBtn').disabled=true;
+  try{
+    if(mode==='in')await signInWithEmailAndPassword(auth,email,pass);
+    else await createUserWithEmailAndPassword(auth,email,pass);
+  }catch(err){msg(errText(err))}
+  $('authBtn').disabled=false;
+  return false;
+};
+window.authGoogle=async()=>{
+  msg('');
+  try{await signInWithPopup(auth,new GoogleAuthProvider())}catch(err){msg(errText(err))}
+};
+window.authReset=async()=>{
+  const email=$('authEmail').value.trim();
+  if(!email){msg('اكتب بريدك الأول وبعدين اضغط "نسيت كلمة المرور".');return}
+  try{await sendPasswordResetEmail(auth,email);msg('بعتنالك رابط إعادة تعيين كلمة المرور على بريدك.','ok')}catch(err){msg(errText(err))}
+};
+
+// ===== المزامنة =====
+const setSync=t=>{const s=$('syncState');if(s)s.textContent=t};
+function collect(){
+  const d={};
+  KEYS.forEach(k=>{try{const v=JSON.parse(localStorage.getItem('workspace_'+k));if(v!==null)d[k]=v}catch{}});
+  d.notes=localStorage.getItem('workspace_notes')||'';
+  return d;
+}
+async function push(){
+  if(!user||!dirty)return;
+  dirty=false;
+  try{
+    await setDoc(doc(db,'users',user.uid),{payload:JSON.stringify(collect()),updatedAt:serverTimestamp()});
+    setSync('☁ تم الحفظ');
+  }catch(err){dirty=true;setSync('⚠ فشل الحفظ — هيحاول تاني');setTimeout(push,5000)}
+}
+window.cloudSave=()=>{
+  if(!user)return;
+  dirty=true;setSync('☁ جارٍ الحفظ...');
+  clearTimeout(saveTimer);saveTimer=setTimeout(push,800);
+};
+document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(saveTimer);push()}});
+
+function clearLocal(){Object.keys(localStorage).filter(k=>k.startsWith('workspace_')).forEach(k=>localStorage.removeItem(k))}
+
+window.logout=async()=>{
+  clearTimeout(saveTimer);await push();
+  user=null;await signOut(auth);
+};
+
+onAuthStateChanged(auth,async u=>{
+  if(!u){
+    user=null;clearLocal();loadState();
+    document.body.classList.remove('authed');
+    $('authPass').value='';showForm();return;
+  }
+  // تسجيل دخول: حمّل بيانات الحساب
+  try{
+    $('authForm').style.display='none';$('authLoading').style.display='block';$('authLoading').textContent='جارٍ تحميل بياناتك...';
+    const snap=await getDoc(doc(db,'users',u.uid));
+    if(snap.exists()){
+      const d=JSON.parse(snap.data().payload||'{}');
+      clearLocal();
+      KEYS.forEach(k=>{if(d[k]!==undefined)localStorage.setItem('workspace_'+k,JSON.stringify(d[k]))});
+      localStorage.setItem('workspace_notes',d.notes||'');
+      user=u;
+    }else{
+      // حساب جديد: لو في بيانات محلية قديمة (من النسخة القديمة) ارفعها
+      user=u;dirty=true;await push();
+    }
+    $('whoEmail').textContent=u.email||'';$('whoEmail2').textContent=u.email||'';
+    loadState();setSync('☁ متزامن');
+    document.body.classList.add('authed');
+  }catch(err){
+    user=null;
+    $('authLoading').style.display='none';$('authForm').style.display='block';
+    msg('تعذّر تحميل بياناتك: '+(err.code||err.message)+' — اتأكد إن Firestore مفعّل وإن القواعد (Rules) اتنشرت.');
+    await signOut(auth);
+  }
+});
+</script>
+</body>
+</html>
