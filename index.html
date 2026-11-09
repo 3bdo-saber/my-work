@@ -173,7 +173,7 @@ button{cursor:pointer;border:0}
  @page{size:A4;margin:14mm}
  html,body{background:#fff!important}
  body{zoom:1!important}
- body.printing .app,body.printing #authScreen,body.printing #dayModal{display:none!important}
+ body.printing .app,body.printing #authScreen,body.printing #dayModal,body.printing #taskModal{display:none!important}
  body.printing #printArea{display:block}
  .rpt,.rpt *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -279,6 +279,14 @@ body:not(.authed) #dayModal{display:none!important}
 .day-group.today h3{color:var(--blue-dark)}
 .day-group .muted{margin-right:auto;margin-left:10px}
 @media(max-width:700px){.dt{padding:12px;gap:10px}.daily-range{font-size:15px}.date-pick{flex:1}}
+
+/* ===== نافذة تعديل المهمة ===== */
+.tm-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tm-f{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted);font-weight:bold}
+.tm-f.wide{grid-column:1/-1}
+.tm-foot{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:14px 24px;border-top:1px solid var(--line);background:#fff}
+@media(max-width:700px){.tm-grid{grid-template-columns:1fr 1fr}.tm-foot{padding:12px 16px}.tm-foot .btn{flex:1}}
+body:not(.authed) #taskModal{display:none!important}
 
 /* ===== تسجيل الدخول ===== */
 body:not(.authed) .app{display:none}
@@ -444,6 +452,28 @@ body.authed #authScreen{display:none}
  </div>
 </div>
 
+<div id="taskModal" class="modal" style="z-index:70" onclick="if(event.target===this)closeTaskModal()" role="dialog" aria-modal="true" aria-labelledby="tmHeading">
+ <div class="modal-card" style="max-width:660px">
+  <div class="modal-head">
+   <div><div class="eyebrow">تعديل المهمة</div><h2 id="tmHeading">تفاصيل المهمة</h2><div class="muted" id="tmSub"></div></div>
+   <div class="modal-actions"><button class="modal-x" onclick="closeTaskModal()" aria-label="إغلاق">×</button></div>
+  </div>
+  <div class="modal-body">
+   <div class="tm-grid">
+    <label class="tm-f wide"><span>عنوان المهمة</span><input class="field title-input" id="tmTitle" placeholder="عنوان المهمة"></label>
+    <label class="tm-f wide"><span>التفاصيل</span><textarea class="field" id="tmNote" rows="6" placeholder="اشرح تفاصيل المهمة هنا..." style="line-height:1.9;resize:vertical"></textarea></label>
+    <label class="tm-f"><span>التاريخ</span><input class="field" id="tmDate" type="date"></label>
+    <label class="tm-f"><span>الوقت</span><input class="field" id="tmTime" type="time"></label>
+    <label class="tm-f"><span>الحالة</span><select class="field" id="tmDone"><option value="0">متبقية</option><option value="1">منجزة ✓</option></select></label>
+    <label class="tm-f"><span>الأولوية</span><select class="field" id="tmPri"><option value="high">عالية</option><option value="medium">متوسطة</option><option value="low">منخفضة</option></select></label>
+    <label class="tm-f"><span>التصنيف</span><select class="field" id="tmCat"></select></label>
+    <label class="tm-f"><span>المشروع</span><select class="field" id="tmProj"></select></label>
+   </div>
+  </div>
+  <div class="tm-foot"><button class="btn" onclick="saveTaskModal()">حفظ التعديلات</button><button class="btn btn-light" onclick="closeTaskModal()">إلغاء</button><button class="btn btn-light" onclick="moveFromModal(1)">انقلها لبكرة</button><button class="btn btn-danger" style="margin-right:auto" onclick="deleteFromModal()">حذف المهمة</button></div>
+ </div>
+</div>
+
 <script>
 const $=id=>document.getElementById(id);
 const read=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('workspace_'+k))??d}catch{return d}};
@@ -560,6 +590,24 @@ const days=dailyRange(),l=tasks.filter(t=>days.includes(t.date)),d=l.filter(t=>t
 const body=days.map(ds=>{const tl=tasks.filter(t=>t.date===ds).sort(sortT),vl=vids.filter(x=>x.date===ds);return `<div class="rpt-day"><h3>${esc(dateText(ds))}</h3>${tl.length?rptTasks(tl):'<p>مفيش مهام.</p>'}${vl.length?rptVids(vl,false):''}</div>`}).join('');
 printReport(rptHead('ملخص الأسبوع',dateText(days[0])+' — '+dateText(days[6]))+rptStats([[l.length,'مهام'],[d,'منجزة'],[l.length-d,'متبقية'],[v.length,'أفكار محتوى']])+body+rptFoot(),'ملخص-أسبوع-'+days[0])}
 
+/* ===== نافذة تعديل المهمة ===== */
+let editTaskId=null;
+function editTask(id){if(id==null){closeTaskModal();return}openTaskModal(id)}
+function openTaskModal(id){const t=tasks.find(x=>x.id===id);if(!t)return;editTaskId=id;
+let c=cats();if(t.cat&&!c.includes(t.cat))c.push(t.cat);
+$('tmTitle').value=t.title;$('tmNote').value=t.note||'';$('tmDate').value=t.date;$('tmTime').value=t.time||'';$('tmPri').value=t.priority||'medium';
+$('tmCat').innerHTML=opts(c,t.cat||'عام');$('tmProj').innerHTML=projOpts(t.projectId);$('tmDone').value=t.done?'1':'0';
+$('tmSub').textContent=dateText(t.date)+(t.done?' · منجزة':'');
+$('taskModal').classList.add('open');document.body.classList.add('modal-open');
+if(window.matchMedia('(hover:hover)').matches)setTimeout(()=>$('tmTitle').focus(),60)}
+function closeTaskModal(){editTaskId=null;$('taskModal').classList.remove('open');document.body.classList.toggle('modal-open',!!selectedDay)}
+function saveTaskModal(){const id=editTaskId,title=$('tmTitle').value.trim();if(id==null)return;
+if(!title){$('tmTitle').focus();$('tmTitle').placeholder='اكتب عنوان المهمة الأول';return}
+tasks=tasks.map(t=>t.id===id?{...t,title,note:$('tmNote').value.trim(),date:$('tmDate').value||t.date,time:$('tmTime').value,priority:$('tmPri').value,cat:$('tmCat').value,projectId:$('tmProj').value?Number($('tmProj').value):null,done:$('tmDone').value==='1'}:t);
+write('tasks',tasks);closeTaskModal();render()}
+function moveFromModal(n){$('tmDate').value=shiftD($('tmDate').value||today(),n);saveTaskModal()}
+function deleteFromModal(){const id=editTaskId;if(id==null)return;if(!confirm('تحذف المهمة دي؟'))return;tasks=tasks.filter(t=>t.id!==id);write('tasks',tasks);closeTaskModal();render()}
+
 function saveNotes(){localStorage.setItem('workspace_notes',$('notesText').value);$('saveStatus').textContent='تم حفظ ملاحظاتك في حسابك ✓';if(window.cloudSave)window.cloudSave();}
 let selectedDay=null;
 const pad=n=>String(n).padStart(2,'0');
@@ -582,14 +630,14 @@ let l=tasks.filter(t=>t.date===ds).sort((a,b)=>(a.time||'99').localeCompare(b.ti
 const chips=l.slice(0,3).map(t=>`<span class="cal-task p-${esc(t.priority)} ${t.done?'done':''}"><i></i><span class="cal-tt">${esc(t.title)}</span></span>`).join(''),more=l.length>3?`<span class="cal-more">+${l.length-3} أخرى</span>`:'';
 h+=`<button class="cal-cell ${ds===today()?'today':''} ${l.length&&dn===l.length?'alldone':''}" onclick="openDay('${ds}')" aria-label="${esc(dateText(ds))}"><span class="cal-top"><span class="cal-num">${d}</span><span class="cal-wd">${wd}</span>${vc?`<span class="cal-vid">▶ ${vc}</span>`:''}</span><span class="cal-tasks">${chips||'<span class="cal-empty-txt">+ إضافة مهمة</span>'}${more}</span>${l.length?`<span class="cal-foot"><span class="progress"><span style="width:${pc}%"></span></span><small>${dn}/${l.length}</small></span>`:''}</button>`}
 $('monthDays').innerHTML=h;
-$('dayModal').classList.toggle('open',!!selectedDay);document.body.classList.toggle('modal-open',!!selectedDay);
+$('dayModal').classList.toggle('open',!!selectedDay);document.body.classList.toggle('modal-open',!!selectedDay||editTaskId!=null);
 if(selectedDay)renderDay();}
 function setDayTab(t){dayTab=t;renderDay()}
 function renderDayTabs(){const tc=tasks.filter(t=>t.date===selectedDay),vc=vids.filter(v=>v.date===selectedDay).length,dn=tc.filter(t=>t.done).length;
 $('dayTabs').innerHTML=`<button class="mtab ${dayTab==='tasks'?'on':''}" onclick="setDayTab('tasks')">المهام<span>${tc.length}</span></button><button class="mtab ${dayTab==='ideas'?'on':''}" onclick="setDayTab('ideas')">أفكار المحتوى<span>${vc}</span></button>`;
 $('dayPaneTasks').style.display=dayTab==='tasks'?'block':'none';$('dayPaneIdeas').style.display=dayTab==='ideas'?'block':'none';
 $('daySummary').textContent=tc.length?dn+' من '+tc.length+' مهمة منجزة':'اليوم فاضي — ابدأ بإضافة أول مهمة';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&selectedDay)closeDay()});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(editTaskId!=null)closeTaskModal();else if(selectedDay)closeDay()});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){$('todayLabel').textContent=dateText(today());render()}});
 const DEFAULT_SETTINGS={accent:'blue',size:'1',hidePast:false,showDone:true,cats:'شغل,شخصي,تسويق,دراسة'};
 let settings={...DEFAULT_SETTINGS,...read('settings',{})};
@@ -604,7 +652,6 @@ const open=openNotes.has(t.id),pn=projName(t.projectId),pri=t.priority==='high'?
 const tags=`${showDate?`<span class="task-meta">${esc(t.date)}</span>`:''}${t.time?`<span class="task-meta">🕒 ${esc(t.time)}</span>`:''}${t.cat&&t.cat!=='عام'?`<span class="tag">${esc(t.cat)}</span>`:''}${pn?`<span class="tag proj">📁 ${esc(pn)}</span>`:''}<span class="tag ${esc(t.priority)}">${pri}</span>`;
 return `<div class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" aria-label="تم"><div class="task-body"><span class="task-title">${esc(t.title)}</span><div class="task-tags">${tags}</div>${t.note?`<button class="detail-toggle" onclick="toggleNote(${t.id})">${open?'إخفاء التفاصيل ▴':'عرض التفاصيل ▾'}</button>`:''}${t.note&&open?`<div class="task-detail">${esc(t.note)}</div>`:''}</div><button class="edit-btn" onclick="editTask(${t.id})" title="تعديل">✎</button><button class="delete" onclick="removeTask(${t.id})" title="حذف">×</button></div>`}
 function editHTML(t){let c=cats();if(t.cat&&!c.includes(t.cat))c.push(t.cat);return `<div class="task edit"><div class="edit-grid"><input class="field wide" data-f="title" value="${esc(t.title)}"><input class="field" data-f="date" type="date" value="${t.date}"><select class="field" data-f="pri">${opts(PRI,t.priority)}</select><select class="field" data-f="cat">${opts(c,t.cat||'عام')}</select><select class="field" data-f="proj">${projOpts(t.projectId)}</select><input class="field" data-f="time" type="time" value="${t.time||''}"><textarea class="field wide" data-f="note" rows="2" placeholder="تفاصيل المهمة (اختياري)">${esc(t.note||'')}</textarea></div><div class="edit-actions"><button class="btn" onclick="saveEdit(${t.id},this)">حفظ</button><button class="btn btn-light" onclick="editTask(null)">إلغاء</button><button class="btn btn-light" onclick="moveTask(${t.id},1)">انقلها لبكرة</button></div></div>`}
-function editTask(id){editingId=id;render();}
 function saveEdit(id,btn){const b=btn.closest('.task.edit'),g=f=>b.querySelector('[data-f="'+f+'"]');tasks=tasks.map(t=>t.id===id?{...t,title:g('title').value.trim()||t.title,date:g('date').value||t.date,priority:g('pri').value,cat:g('cat').value,projectId:g('proj').value?Number(g('proj').value):null,time:g('time').value,note:g('note').value.trim()}:t);write('tasks',tasks);editingId=null;render();}
 function moveTask(id,n){let t=tasks.find(x=>x.id===id),d=new Date(t.date+'T12:00:00');d.setDate(d.getDate()+n);t.date=d.toISOString().slice(0,10);write('tasks',tasks);editingId=null;render();}
 function setFilter(k){dayFilter=k;render();}
