@@ -251,9 +251,34 @@ body.modal-open{overflow:hidden}
  .modal-head,.modal-body{padding-left:16px;padding-right:16px}.modal-tabs{padding:0 16px}
  .add-row{grid-template-columns:1fr 1fr}.add-row .btn{grid-column:1/-1}
  .month-summary{gap:12px}.ms-sep{display:none}
- #monthHead{flex-direction:column;align-items:stretch;gap:12px}.month-nav .btn{flex:1;padding:10px 8px}
+ #monthHead,#daily>.section-title{flex-direction:column;align-items:stretch;gap:12px}.month-nav .btn{flex:1;padding:10px 8px}
 }
 body:not(.authed) #dayModal{display:none!important}
+
+/* ===== صفحة المهام اليومية ===== */
+.daily-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{background:transparent;color:var(--muted);padding:7px 20px;border-radius:8px;font-size:13px}
+.seg button.on{background:var(--blue);color:#fff}
+.daily-range{font-size:17px;font-weight:bold;color:var(--blue-dark)}
+.date-pick{width:auto}
+.dt{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-right:4px solid #d9a441;border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.dt.p-high{border-right-color:#d0605a}.dt.p-low{border-right-color:#5aa683}
+.dt.done{border-right-color:#c4cedb}.dt.done .dt-detail{opacity:.65}
+.dt input[type=checkbox]{width:20px;height:20px;accent-color:var(--blue);margin-top:3px;flex:none}
+.dt-main{flex:1;min-width:0}
+.dt-title{margin:0;font-size:16px;line-height:1.6}
+.dt.done .dt-title{text-decoration:line-through;color:#a3b0c2}
+.dt-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.dt-detail{margin-top:12px;background:var(--bg);border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.9;color:#3b4d66;white-space:pre-wrap}
+.dt-label{display:block;font-size:11px;color:var(--muted);font-weight:bold;margin-bottom:4px}
+.dt-actions{display:flex;gap:2px;flex:none}
+.dt.editing{display:block;padding:8px 18px}
+.day-group{margin:24px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.day-group h3{margin:0;font-size:16px}
+.day-group.today h3{color:var(--blue-dark)}
+.day-group .muted{margin-right:auto;margin-left:10px}
+@media(max-width:700px){.dt{padding:12px;gap:10px}.daily-range{font-size:15px}.date-pick{flex:1}}
 
 /* ===== تسجيل الدخول ===== */
 body:not(.authed) .app{display:none}
@@ -306,6 +331,7 @@ body.authed #authScreen{display:none}
  <nav class="nav">
   <button class="active" data-page="dashboard"><span class="ico">⌂</span><span class="nav-text">لوحة التحكم</span></button>
   <button data-page="monthly"><span class="ico">▦</span><span class="nav-text">الشهر والأيام</span></button>
+  <button data-page="daily"><span class="ico">☰</span><span class="nav-text">المهام اليومية</span></button>
   <div class="nav-label">الإدارة والتطوير</div>
   <button data-page="projects"><span class="ico">◫</span><span class="nav-text">المشاريع</span></button>
   <button data-page="marketing"><span class="ico">◉</span><span class="nav-text">مساحة التسويق</span></button>
@@ -331,7 +357,7 @@ body.authed #authScreen{display:none}
    <div class="stat"><div class="stat-top"><span>المشاريع</span><span class="stat-icon">◫</span></div><strong id="projectCount">0</strong><small>مشاريع قيد المتابعة</small></div>
   </div>
   <div class="two-col">
-   <div class="panel"><div class="panel-head"><h3>مهام اليوم</h3><button class="btn btn-light" onclick="openDay(today())">عرض الكل</button></div><div id="dashTasks"></div></div>
+   <div class="panel"><div class="panel-head"><h3>مهام اليوم</h3><button class="btn btn-light" onclick="openDaily(today())">عرض الكل</button></div><div id="dashTasks"></div></div>
    <div class="panel"><div class="panel-head"><h3>تقدم الشهر</h3><span class="muted" id="monthPercent">0%</span></div><div class="progress"><span id="monthBar" style="width:0%"></span></div><div class="progress-row"><span>المهام المكتملة</span><span id="monthProgressText">0 من 0</span></div><div style="height:1px;background:var(--line);margin:20px 0"></div><div class="panel-head"><h3>إضافة سريعة</h3><span class="muted">سجّل اللي في بالك</span></div><div class="quick-add"><input id="quickTask" class="field" placeholder="اكتب مهمة جديدة..."><button class="btn" onclick="quickAdd()">إضافة</button></div></div>
   </div>
  </section>
@@ -340,6 +366,20 @@ body.authed #authScreen{display:none}
   <div class="month-summary" id="monthSummary"></div>
   <div class="cal-head" id="calHead"></div>
   <div class="cal-grid" id="monthDays"></div>
+ </section>
+ <section class="page" id="daily">
+  <div class="section-title"><div><h2>المهام اليومية</h2><p>كل مهام اليوم أو الأسبوع بتفاصيلها كاملة، وتقدر تضيف وتعدّل وتنجز من هنا.</p></div><div class="month-nav"><button class="btn btn-light" onclick="dailyShift(-1)">السابق</button><button class="btn btn-light" onclick="dailyToday()">النهارده</button><button class="btn btn-light" onclick="dailyShift(1)">التالي</button><input class="field date-pick" id="dailyPick" type="date" onchange="dailySet(this.value)" title="اختار تاريخ"><button class="btn" onclick="exportDailyPDF()">⬇ PDF</button></div></div>
+  <div class="daily-bar"><div class="seg" id="dailySeg"></div><div class="daily-range" id="dailyRange"></div></div>
+  <div class="month-summary" id="dailySummary"></div>
+  <div class="add-box">
+   <div class="muted" id="dailyAddFor"></div>
+   <input class="field title-input" id="dyTask" placeholder="عنوان المهمة">
+   <textarea class="field" id="dyNote" rows="3" placeholder="تفاصيل المهمة: اشرح هنا كل اللي محتاج تفتكره (اختياري)"></textarea>
+   <div class="add-row"><select class="field" id="dyCat"></select><select class="field" id="dyProject" title="المشروع"></select><select class="field" id="dyPriority"><option value="medium">أولوية متوسطة</option><option value="high">أولوية عالية</option><option value="low">أولوية منخفضة</option></select><input class="field" id="dyTime" type="time" title="الوقت"><button class="btn" onclick="addDailyTask()">+ إضافة المهمة</button></div>
+  </div>
+  <div class="chips" id="dailyChips"></div>
+  <div id="dailyList"></div>
+  <div id="dailyVids"></div>
  </section>
  <section class="page" id="projects">
   <div class="section-title"><div><h2>المشاريع</h2><p>تابع المشاريع والأعمال اللي بتشتغل عليها.</p></div></div>
@@ -383,7 +423,7 @@ body.authed #authScreen{display:none}
  <div class="modal-card">
   <div class="modal-head">
    <div><div class="eyebrow">تفاصيل اليوم</div><h2 id="dayTitle"></h2><div class="muted" id="daySummary"></div></div>
-   <div class="modal-actions"><button class="btn btn-light" onclick="exportDayPDF()">⬇ PDF اليوم</button><button class="modal-x" onclick="closeDay()" aria-label="إغلاق">×</button></div>
+   <div class="modal-actions"><button class="btn btn-light" onclick="openDaily(selectedDay)">فتح كصفحة كاملة</button><button class="btn btn-light" onclick="exportDayPDF()">⬇ PDF اليوم</button><button class="modal-x" onclick="closeDay()" aria-label="إغلاق">×</button></div>
   </div>
   <div class="modal-tabs" id="dayTabs"></div>
   <div class="modal-body">
@@ -413,7 +453,7 @@ const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth
 const dateText=d=>new Date(d+'T12:00:00').toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
 $('todayLabel').textContent=dateText(today());
 $('notesText').value=localStorage.getItem('workspace_notes')||'';
-function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(p).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));const names={dashboard:'صباح الإنجاز 👋',monthly:'الشهر والأيام',settings:'الإعدادات',projects:'المشاريع',marketing:'مساحة التسويق',ideas:'بنك الأفكار',videos:'أفكار الفيديو',notes:'الملاحظات'};$('pageTitle').textContent=names[p];}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(p).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));const names={dashboard:'صباح الإنجاز 👋',monthly:'الشهر والأيام',settings:'الإعدادات',projects:'المشاريع',marketing:'مساحة التسويق',ideas:'بنك الأفكار',videos:'أفكار الفيديو',daily:'المهام اليومية',notes:'الملاحظات'};$('pageTitle').textContent=names[p];}
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{closeDay();showPage(b.dataset.page)}));
 function quickAdd(){let title=$('quickTask').value.trim();if(!title)return;tasks.push({id:Date.now(),title,type:'daily',date:today(),priority:'medium',done:false});write('tasks',tasks);$('quickTask').value='';render();}
 function toggleTask(id){tasks=tasks.map(t=>t.id===id?{...t,done:!t.done}:t);write('tasks',tasks);render();}
@@ -437,7 +477,7 @@ const pidOf=x=>projects.some(p=>p.id===x.projectId)?x.projectId:null;
 const projList=v=>projects.map(p=>`<option value="${p.id}" ${String(p.id)===String(v)?'selected':''}>${esc(p.name)}</option>`).join('');
 const projOpts=v=>'<option value="">بدون مشروع</option>'+projList(v);
 const safeUrl=u=>{u=(u||'').trim();if(!u)return '';try{const x=new URL(/^https?:\/\//i.test(u)?u:'https://'+u);return /^https?:$/.test(x.protocol)?x.href:''}catch{return ''}};
-function fillSelects(){['dayProject','vProj','dvProj'].forEach(id=>{const e=$(id);if(!e)return;const v=e.value;e.innerHTML=projOpts();e.value=v});['vPlat','dvPlat'].forEach(id=>{const e=$(id);if(e&&!e.options.length)e.innerHTML=opts(PLAT,'tiktok')})}
+function fillSelects(){['dayProject','dyProject','vProj','dvProj'].forEach(id=>{const e=$(id);if(!e)return;const v=e.value;e.innerHTML=projOpts();e.value=v});['vPlat','dvPlat'].forEach(id=>{const e=$(id);if(e&&!e.options.length)e.innerHTML=opts(PLAT,'tiktok')})}
 function projStats(id){const t=tasks.filter(x=>x.projectId===id),d=t.filter(x=>x.done).length;return{total:t.length,done:d,pct:t.length?Math.round(d/t.length*100):0,vids:vids.filter(x=>x.projectId===id).length}}
 function projCardHTML(p){const s=projStats(p.id);return `<div class="mini-card"><button class="delete" onclick="removeProject(${p.id})">×</button><h3>${esc(p.name)}</h3><p>${esc(p.desc||'لا يوجد وصف مضاف بعد.')}</p><div class="progress" style="margin-top:12px"><span style="width:${s.pct}%"></span></div><div class="card-foot"><span>${s.done}/${s.total} مهمة · ${s.vids} فكرة</span><span>${s.pct}%</span></div><div class="vid-foot" style="border:0;padding-top:10px"><select class="field vid-stat" style="margin-right:0" onchange="setProjStatus(${p.id},this.value)">${opts(['قيد التنفيذ','مخطط له','مكتمل'],p.status)}</select><button class="btn btn-light btn-sm" style="margin-right:auto" onclick="showProject(${p.id})">${openProj===p.id?'إخفاء التفاصيل':'عرض التفاصيل'}</button></div></div>`}
 function renderProjectDetail(){const el=$('projectDetail'),p=projects.find(x=>x.id===openProj);if(!p){openProj=null;el.innerHTML='';return}
@@ -470,7 +510,7 @@ const rptStats=a=>`<div class="rpt-stats">${a.map(([n,l])=>`<div class="rpt-stat
 const rptFoot=()=>`<div class="rpt-foot">تم إنشاء التقرير من مساحتي — ${esc(new Date().toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}))}</div>`;
 function rptTasks(l){return l.length?`<table><thead><tr><th>الوقت</th><th>المهمة</th><th>التصنيف</th><th>المشروع</th><th>الأولوية</th><th>الحالة</th></tr></thead><tbody>${l.map(t=>`<tr><td>${esc(t.time||'—')}</td><td>${esc(t.title)}${t.note?`<br><small>${esc(t.note)}</small>`:''}</td><td>${esc(t.cat||'عام')}</td><td>${esc(projName(t.projectId)||'—')}</td><td>${priName(t.priority)}</td><td class="${t.done?'done':''}">${t.done?'✓ منجزة':'○ متبقية'}</td></tr>`).join('')}</tbody></table>`:'<p>مفيش مهام.</p>'}
 function rptVids(l,wd){return `<table><thead><tr>${wd?'<th>التاريخ</th>':''}<th>المنصة</th><th>الفكرة</th><th>اللينك</th><th>المشروع</th><th>الحالة</th></tr></thead><tbody>${l.map(v=>{const u=safeUrl(v.link);return `<tr>${wd?`<td>${esc(v.date||'—')}</td>`:''}<td>${esc(platName(v.platform))}</td><td>${esc(v.title)}${v.note?`<br><small>${esc(v.note)}</small>`:''}</td><td>${u?`<a href="${esc(u)}">${esc(u)}</a>`:'—'}</td><td>${esc(projName(v.projectId)||'—')}</td><td>${esc(v.status)}</td></tr>`}).join('')}</tbody></table>`}
-function exportDayPDF(){const ds=selectedDay;if(!ds)return;
+function exportDayPDF(dd){const ds=dd||selectedDay;if(!ds)return;
 const l=tasks.filter(t=>t.date===ds).sort((a,b)=>(a.time||'99').localeCompare(b.time||'99')),d=l.filter(t=>t.done).length,v=vids.filter(x=>x.date===ds);
 printReport(rptHead('ملخص اليوم',dateText(ds))+rptStats([[l.length,'مهام'],[d,'منجزة'],[l.length-d,'متبقية'],[v.length,'أفكار محتوى']])+'<h2>المهام</h2>'+rptTasks(l)+'<h2>أفكار المحتوى</h2>'+(v.length?rptVids(v,false):'<p>مفيش أفكار.</p>')+rptFoot(),'ملخص-يوم-'+ds)}
 function exportMonthPDF(){const y=calendarDate.getFullYear(),m=calendarDate.getMonth(),ym=y+'-'+pad(m+1),label=calendarDate.toLocaleDateString('ar-EG',{month:'long',year:'numeric'});
@@ -481,6 +521,44 @@ const projTable=groups.length?`<table><thead><tr><th>المشروع</th><th>ال
 const days=[...new Set([...mt.map(t=>t.date),...mv.map(v=>v.date)])].sort();
 const dayHTML=days.map(ds=>{const l=mt.filter(t=>t.date===ds).sort((a,b)=>(a.time||'99').localeCompare(b.time||'99')),v=mv.filter(x=>x.date===ds);return `<div class="rpt-day"><h3>${esc(dateText(ds))}</h3>${l.length?rptTasks(l):''}${v.length?rptVids(v,false):''}</div>`}).join('')||'<p>مفيش بيانات في الشهر ده.</p>';
 printReport(rptHead('ملخص الشهر',label)+rptStats([[mt.length,'مهام'],[d,'منجزة'],[pct+'%','نسبة الإنجاز'],[mv.length,'أفكار محتوى']])+`<p>أفكار تيك توك: <b>${tt}</b> · أفكار إنستجرام: <b>${ig}</b> · تم نشرها: <b>${pub}</b></p><h2>حسب المشروع</h2>`+projTable+'<h2>التفاصيل يوم بيوم</h2>'+dayHTML+rptFoot(),'ملخص-شهر-'+ym)}
+
+/* ===== صفحة المهام اليومية ===== */
+let dailyDate=today(),dailyMode='day',dFilter='all',dCat='',dProj='';
+const fmtD=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const shiftD=(ds,n)=>{const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()+n);return fmtD(d)};
+const weekStartD=ds=>shiftD(ds,-((new Date(ds+'T12:00:00').getDay()+1)%7));
+const dateLong=ds=>new Date(ds+'T12:00:00').toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const sortT=(a,b)=>(a.time||'99').localeCompare(b.time||'99')||a.id-b.id;
+function openDaily(ds){selectedDay=null;editingId=null;dailyDate=ds||today();showPage('daily');render()}
+function dailyShift(n){dailyDate=shiftD(dailyDate,dailyMode==='week'?n*7:n);render()}
+function dailyToday(){dailyDate=today();render()}
+function dailySet(v){if(v){dailyDate=v;render()}}
+function setDailyMode(m){dailyMode=m;render()}
+function dailyRange(){return dailyMode==='week'?Array.from({length:7},(_,i)=>shiftD(weekStartD(dailyDate),i)):[dailyDate]}
+function addDailyTask(){const title=$('dyTask').value.trim();if(!title){$('dyTask').focus();$('dyTask').placeholder='اكتب عنوان المهمة الأول';return}
+tasks.push({id:Date.now(),title,type:'daily',date:dailyDate,priority:$('dyPriority').value,time:$('dyTime').value,cat:$('dyCat').value,projectId:$('dyProject').value?Number($('dyProject').value):null,note:$('dyNote').value.trim(),done:false});
+write('tasks',tasks);$('dyTask').value='';$('dyNote').value='';render();$('dyTask').focus()}
+function fullTaskHTML(t){if(t.id===editingId)return `<div class="dt editing">${editHTML(t)}</div>`;
+const pn=projName(t.projectId),pri=t.priority==='high'?'عالية':t.priority==='low'?'منخفضة':'متوسطة';
+return `<article class="dt p-${esc(t.priority)} ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" aria-label="تم"><div class="dt-main"><h3 class="dt-title">${esc(t.title)}</h3><div class="dt-tags">${t.time?`<span class="task-meta">🕒 ${esc(t.time)}</span>`:''}${t.cat&&t.cat!=='عام'?`<span class="tag">${esc(t.cat)}</span>`:''}${pn?`<span class="tag proj">📁 ${esc(pn)}</span>`:''}<span class="tag ${esc(t.priority)}">${pri}</span>${t.done?'<span class="tag low">✓ منجزة</span>':''}</div><div class="dt-detail"><span class="dt-label">التفاصيل</span>${t.note?esc(t.note):'<span class="muted">مفيش تفاصيل مكتوبة — اضغط ✎ عشان تضيف.</span>'}</div></div><div class="dt-actions"><button class="edit-btn" onclick="editTask(${t.id})" title="تعديل">✎</button><button class="edit-btn" onclick="moveTask(${t.id},1)" title="انقلها لبكرة">⇢</button><button class="delete" onclick="removeTask(${t.id})" title="حذف">×</button></div></article>`}
+function renderDaily(){const days=dailyRange(),inR=t=>days.includes(t.date);
+const flt=t=>(dFilter==='all'||(dFilter==='done')===t.done)&&(!dCat||(t.cat||'عام')===dCat)&&(!dProj||String(t.projectId)===dProj)&&(settings.showDone||!t.done);
+const all=tasks.filter(inR),dn=all.filter(t=>t.done).length,pc=all.length?Math.round(dn/all.length*100):0,vv=vids.filter(v=>days.includes(v.date));
+$('dailyPick').value=dailyDate;
+$('dailySeg').innerHTML=[['day','يوم'],['week','أسبوع']].map(([k,n])=>`<button class="${dailyMode===k?'on':''}" onclick="setDailyMode('${k}')">${n}</button>`).join('');
+$('dailyRange').textContent=dailyMode==='week'?dateText(days[0])+' ← '+dateText(days[6]):dateLong(dailyDate)+(dailyDate===today()?' (النهارده)':'');
+$('dailyAddFor').textContent='إضافة مهمة ليوم '+dateText(dailyDate);
+$('dailySummary').innerHTML=`<div class="ms-item"><b>${all.length}</b><span>مهمة</span></div><div class="ms-item"><b>${dn}</b><span>منجزة</span></div><div class="ms-item"><b>${all.length-dn}</b><span>متبقية</span></div><div class="ms-item"><b>${vv.length}</b><span>أفكار محتوى</span></div><div class="ms-sep"></div><div class="ms-progress"><div class="row"><span>نسبة الإنجاز</span><b>${pc}%</b></div><div class="progress"><span style="width:${pc}%"></span></div></div>`;
+$('dailyChips').innerHTML=[['all','الكل'],['open','متبقي'],['done','منجز']].map(([k,n])=>`<button class="chip ${dFilter===k?'on':''}" onclick="dFilter='${k}';render()">${n}</button>`).join('')+`<select class="field chip-sel" onchange="dCat=this.value;render()"><option value="">كل التصنيفات</option>${opts(cats(),dCat)}</select><select class="field chip-sel" style="margin-right:0" onchange="dProj=this.value;render()"><option value="">كل المشاريع</option>${projList(dProj)}</select>`;
+$('dailyList').innerHTML=days.map(ds=>{const l=tasks.filter(t=>t.date===ds&&flt(t)).sort(sortT),tot=tasks.filter(t=>t.date===ds);
+const body=l.length?l.map(fullTaskHTML).join(''):`<div class="empty">${tot.length?'مفيش مهام بالفلتر ده.':(dailyMode==='week'?'مفيش مهام في اليوم ده.':'مفيش مهام لليوم ده. ابدأ بإضافة أول مهمة من فوق.')}</div>`;
+if(dailyMode==='day')return body;
+return `<div class="day-group ${ds===today()?'today':''}"><h3>${esc(dateLong(ds))}</h3><span class="muted">${tot.filter(t=>t.done).length}/${tot.length} منجزة</span><button class="btn btn-light btn-sm" onclick="dailyDate='${ds}';dailyMode='day';render()">فتح اليوم</button></div>${body}`}).join('');
+$('dailyVids').innerHTML=vv.length?`<div class="sub-head">أفكار المحتوى (${vv.length})</div><div class="vid-grid">${vv.map(v=>vidHTML(v)).join('')}</div>`:''}
+function exportDailyPDF(){if(dailyMode==='day'){exportDayPDF(dailyDate);return}
+const days=dailyRange(),l=tasks.filter(t=>days.includes(t.date)),d=l.filter(t=>t.done).length,v=vids.filter(x=>days.includes(x.date));
+const body=days.map(ds=>{const tl=tasks.filter(t=>t.date===ds).sort(sortT),vl=vids.filter(x=>x.date===ds);return `<div class="rpt-day"><h3>${esc(dateText(ds))}</h3>${tl.length?rptTasks(tl):'<p>مفيش مهام.</p>'}${vl.length?rptVids(vl,false):''}</div>`}).join('');
+printReport(rptHead('ملخص الأسبوع',dateText(days[0])+' — '+dateText(days[6]))+rptStats([[l.length,'مهام'],[d,'منجزة'],[l.length-d,'متبقية'],[v.length,'أفكار محتوى']])+body+rptFoot(),'ملخص-أسبوع-'+days[0])}
 
 function saveNotes(){localStorage.setItem('workspace_notes',$('notesText').value);$('saveStatus').textContent='تم حفظ ملاحظاتك في حسابك ✓';if(window.cloudSave)window.cloudSave();}
 let selectedDay=null;
@@ -537,15 +615,15 @@ $('dayChips').innerHTML=[['all','الكل'],['open','متبقي'],['done','من�
 $('dayList').innerHTML=l.length?l.map(t=>taskHTML(t)).join(''):`<div class="empty">${all.length?'مفيش مهام بالفلتر ده.':'اليوم فاضي. أضف أول مهمة.'}</div>`;
 const dv=vids.filter(v=>v.date===selectedDay);$('dayVids').innerHTML=dv.length?dv.map(v=>vidHTML(v)).join(''):'<div class="empty" style="grid-column:1/-1">مفيش أفكار محتوى في اليوم ده.</div>';}
 function applySettings(){const P={blue:['#4a86c7','#2f5f9e','#eaf2fb','#f3f7fc'],sky:['#3aa0c9','#23769c','#e6f4fa','#f2f9fc'],indigo:['#5b78c7','#3b53a0','#ebeffb','#f4f6fc'],slate:['#6b8299','#435a70','#ebf0f4','#f5f7f9']},p=P[settings.accent]||P.blue,r=document.documentElement.style;r.setProperty('--blue',p[0]);r.setProperty('--blue-dark',p[1]);r.setProperty('--panel2',p[2]);r.setProperty('--bg',p[3]);document.body.style.zoom=settings.size;
-$('swatches').innerHTML=Object.keys(P).map(k=>`<button class="swatch ${settings.accent===k?'on':''}" style="background:${P[k][0]}" onclick="setOpt('accent','${k}')"></button>`).join('');$('setSize').value=settings.size;$('setHide').checked=!!settings.hidePast;$('setDone').checked=settings.showDone!==false;$('setCats').value=settings.cats;$('dayCat').innerHTML=opts(cats(),'عام');}
+$('swatches').innerHTML=Object.keys(P).map(k=>`<button class="swatch ${settings.accent===k?'on':''}" style="background:${P[k][0]}" onclick="setOpt('accent','${k}')"></button>`).join('');$('setSize').value=settings.size;$('setHide').checked=!!settings.hidePast;$('setDone').checked=settings.showDone!==false;$('setCats').value=settings.cats;$('dayCat').innerHTML=opts(cats(),'عام');$('dyCat').innerHTML=opts(cats(),'عام');}
 function setOpt(k,v){settings[k]=v;write('settings',settings);applySettings();render();}
 function exportData(){let d={tasks,projects,campaigns,ideas,vids,notes:$('notesText').value,settings},a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='workspace-backup.json';a.click();}
 function importData(i){let f=i.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);['tasks','projects','campaigns','ideas','vids','settings'].forEach(k=>{if(d[k])localStorage.setItem('workspace_'+k,JSON.stringify(d[k]))});if(d.notes!=null)localStorage.setItem('workspace_notes',d.notes);loadState();if(window.cloudSave)window.cloudSave();alert('تم الاستيراد ✓')}catch{alert('الملف ده مش نسخة احتياطية صالحة.')}};r.readAsText(f);}
 function resetAll(){if(confirm('هتتمسح كل بياناتك من الجهاز ومن حسابك. متأكد؟')){Object.keys(localStorage).filter(k=>k.startsWith('workspace_')).forEach(k=>localStorage.removeItem(k));loadState();if(window.cloudSave)window.cloudSave()}}
-function render(){renderTasks();renderCards();renderMonth();}
+function render(){renderTasks();renderCards();renderMonth();renderDaily();}
 // إعادة تحميل الحالة كلها من localStorage (بتتنادى بعد تسجيل الدخول/الخروج)
-function loadState(){tasks=read('tasks');projects=read('projects');campaigns=read('campaigns');ideas=read('ideas');vids=read('vids');editingVid=null;openProj=null;settings={...DEFAULT_SETTINGS,...read('settings',{})};$('notesText').value=localStorage.getItem('workspace_notes')||'';selectedDay=null;editingId=null;applySettings();render();showPage('dashboard');}
-$('quickTask').addEventListener('keydown',e=>{if(e.key==='Enter')quickAdd()});$('dayTask').addEventListener('keydown',e=>{if(e.key==='Enter')addDayTask()});$('dvTitle').addEventListener('keydown',e=>{if(e.key==='Enter')addVid('dv')});$('vTitle').addEventListener('keydown',e=>{if(e.key==='Enter')addVid('v')});
+function loadState(){tasks=read('tasks');projects=read('projects');campaigns=read('campaigns');ideas=read('ideas');vids=read('vids');editingVid=null;openProj=null;settings={...DEFAULT_SETTINGS,...read('settings',{})};$('notesText').value=localStorage.getItem('workspace_notes')||'';selectedDay=null;editingId=null;dailyDate=today();applySettings();render();showPage('dashboard');}
+$('quickTask').addEventListener('keydown',e=>{if(e.key==='Enter')quickAdd()});$('dayTask').addEventListener('keydown',e=>{if(e.key==='Enter')addDayTask()});$('dvTitle').addEventListener('keydown',e=>{if(e.key==='Enter')addVid('dv')});$('dyTask').addEventListener('keydown',e=>{if(e.key==='Enter')addDailyTask()});$('vTitle').addEventListener('keydown',e=>{if(e.key==='Enter')addVid('v')});
 applySettings();render();
 </script>
 
