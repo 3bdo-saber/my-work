@@ -342,6 +342,42 @@ body:not(.authed) #taskModal{display:none!important}
 @media(max-width:1000px){.ev-form{grid-template-columns:repeat(2,minmax(0,1fr))}.ev-hero{flex-direction:column}.ev-count{flex-direction:row;justify-content:center;align-items:baseline;gap:10px;min-width:0}.ev-count b{font-size:34px}}
 @media(max-width:700px){.ev-hero{padding:16px}.ev-mini{gap:10px;padding:12px}.ev-days{grid-template-columns:1fr}}
 
+/* ===== خريطة الشهر لاختيار الحدث ===== */
+.ev-planner{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;margin-bottom:16px;align-items:start}
+.ev-planner .panel{margin-bottom:0}
+.pk-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.pk-title{font-size:17px;font-weight:bold}
+.pk-head{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:6px}
+.pk-head span{text-align:center;font-size:11px;font-weight:bold;color:var(--muted)}
+.pk-head b{font-weight:bold}.pk-head .sh{display:none}
+.pk-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.pk-cell{min-height:68px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;cursor:pointer;display:flex;flex-direction:column;gap:3px;overflow:hidden;transition:border-color .12s,background .12s}
+.pk-cell:hover{border-color:var(--blue);background:var(--panel2)}
+.pk-cell .n{font-size:14px;font-weight:bold;color:var(--blue-dark);align-self:flex-start;line-height:1.4}
+.pk-cell.today .n{background:var(--blue);color:#fff;border-radius:6px;padding:0 7px}
+.pk-cell.past{opacity:.55}
+.pk-cell.blank{visibility:hidden;cursor:default;border:0}
+.pk-cell.pk-prep{background:#e9f0fc;border-color:#b6cbee}
+.pk-cell.pk-open{background:#fff4d6;border:2px solid #e0b24a}
+.pk-tag{display:block;font-size:10px;line-height:1.5;border-radius:6px;padding:1px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pk-tag.prep{background:#cfdcf5;color:#2f4f8a}
+.pk-tag.open{background:#e0b24a;color:#fff;font-weight:bold}
+.pk-tag.ev{background:#eef1fb;color:#4b5aa8;cursor:pointer}
+.pk-tag.evopen{background:#fff4d6;color:#8a5a00;border:1px solid #f0d58a;cursor:pointer;font-weight:bold}
+.pk-tag.ev:hover,.pk-tag.evopen:hover{filter:brightness(.95)}
+.pk-note{min-height:20px;margin-top:10px;font-size:12px;color:#b4524b}
+.pk-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px;font-size:11px;color:var(--muted)}
+.pk-legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-left:5px;vertical-align:middle}
+.ev-form-col{display:flex;flex-direction:column;gap:12px}
+.ev-form-col .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ev-sum{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:13px;line-height:1.9}
+.stepper{display:flex;gap:6px;align-items:center}
+.stepper button{width:40px;height:40px;border-radius:10px;background:var(--panel2);color:var(--blue-dark);font-size:20px;line-height:1}
+.stepper button:hover{background:#dce9f7}
+.stepper input{text-align:center;width:80px}
+@media(max-width:1000px){.ev-planner{grid-template-columns:1fr}}
+@media(max-width:700px){.pk-head .fl{display:none}.pk-head .sh{display:inline}.pk-cell{min-height:54px;padding:4px}.pk-tag{font-size:9px;padding:1px 3px}.pk-grid,.pk-head{gap:4px}}
+
 /* ===== تسجيل الدخول ===== */
 body:not(.authed) .app{display:none}
 body.authed #authScreen{display:none}
@@ -447,15 +483,26 @@ body.authed #authScreen{display:none}
  </section>
  <section class="page" id="events">
   <div class="section-title"><div><h2>الافتتاحات والأحداث المهمة</h2><p>سجّل افتتاح فرع أو حدث مهم، وجهّز له خطة أيام قبله ويوم الافتتاح نفسه، وكلها بتظهر على التقويم.</p></div></div>
-  <div class="panel" id="evForm"><div class="panel-head"><h3 id="evFormTitle">حدث جديد</h3><span class="muted">هيظهر على التقويم</span></div>
-   <div class="ev-form">
-    <input class="field wide" id="evTitle" placeholder="اسم الفرع أو الحدث (مثلاً: افتتاح فرع المعادي)">
-    <select class="field" id="evType"><option value="opening">🏪 افتتاح فرع</option><option value="event">⭐ حدث مهم</option></select>
-    <label class="tm-f"><span>تاريخ الافتتاح / الحدث</span><input class="field" id="evDate" type="date"></label>
-    <input class="field" id="evPlace" placeholder="المكان (اختياري)">
-    <label class="tm-f"><span>أيام التجهيز قبله</span><input class="field" id="evPrep" type="number" min="0" max="14" value="5"></label>
-    <label class="ev-tpl" id="evTplWrap"><input type="checkbox" id="evTpl" checked> أضف قايمة تجهيز جاهزة (تقدر تعدّلها)</label>
-    <div class="ev-btns"><button class="btn" id="evSaveBtn" onclick="saveEvent()">+ إضافة</button><button class="btn btn-light" id="evCancelBtn" style="display:none" onclick="cancelEvEdit()">إلغاء</button></div>
+  <div class="ev-planner">
+   <div class="panel" id="evMap">
+    <div class="pk-top"><div><div class="pk-title" id="pkTitle"></div><div class="muted" id="pkModeHint"></div></div><div class="month-nav"><button class="btn btn-light btn-sm" onclick="pkMonth(-1)">السابق</button><button class="btn btn-light btn-sm" onclick="pkMonth(0)">النهارده</button><button class="btn btn-light btn-sm" onclick="pkMonth(1)">التالي</button></div></div>
+    <div class="seg" id="pkMode" style="margin-bottom:12px"></div>
+    <div class="pk-head" id="pkHead"></div>
+    <div class="pk-grid" id="pkGrid"></div>
+    <div class="pk-note" id="pkNote"></div>
+    <div class="pk-legend"><span><i style="background:#e0b24a"></i>يوم الافتتاح / الحدث</span><span><i style="background:#cfdcf5"></i>أيام التجهيز</span><span><i style="background:#eef1fb;border:1px solid #b6cbee"></i>أحداث مسجلة (اضغط عليها لفتحها)</span></div>
+   </div>
+   <div class="panel" id="evForm">
+    <div class="panel-head"><h3 id="evFormTitle">حدث جديد</h3><span class="muted">اختار اليوم من الخريطة</span></div>
+    <div class="ev-form-col">
+     <input class="field" id="evTitle" placeholder="اسم الفرع أو الحدث (مثلاً: افتتاح فرع المعادي)">
+     <div class="two"><select class="field" id="evType" onchange="renderEvents()"><option value="opening">🏪 افتتاح فرع</option><option value="event">⭐ حدث مهم</option></select><input class="field" id="evPlace" placeholder="المكان (اختياري)"></div>
+     <label class="tm-f"><span>التاريخ (بيتحدد من الخريطة)</span><input class="field" id="evDate" type="date" onchange="evDateChanged()"></label>
+     <label class="tm-f"><span>أيام التجهيز قبله</span><div class="stepper"><button type="button" onclick="evPrepStep(-1)" aria-label="أقل">−</button><input class="field" id="evPrep" type="number" min="0" max="14" value="5" oninput="renderEvents()"><button type="button" onclick="evPrepStep(1)" aria-label="أكتر">+</button></div></label>
+     <div class="ev-sum" id="evSummary"></div>
+     <label class="ev-tpl" id="evTplWrap"><input type="checkbox" id="evTpl" checked> أضف قايمة تجهيز جاهزة (تقدر تعدّلها)</label>
+     <div class="ev-btns"><button class="btn" id="evSaveBtn" onclick="saveEvent()">+ إضافة</button><button class="btn btn-light" id="evCancelBtn" style="display:none" onclick="cancelEvEdit()">إلغاء</button></div>
+    </div>
    </div>
   </div>
   <div class="ev-chips" id="evChips"></div>
@@ -705,16 +752,16 @@ for(const e of events){const k=dayDiff(e.date,ds);
 if(k===0){open=true;n++;html+=`<span class="cal-ev" title="${esc(e.title)}">★ <span class="cal-tt">${esc(e.title)}</span></span>`}
 else if(k>0&&k<=(e.prep||0)){n++;html+=`<span class="cal-prep" title="${esc(e.title)}">⏳ <span class="cal-tt">${esc(e.title)}</span><small>${k===1?'قبله بيوم':'قبله بـ'+k}</small></span>`}}
 return{html,n,open}}
-function resetEvForm(){evEditId=null;$('evTitle').value='';$('evPlace').value='';$('evPrep').value=5;$('evType').value='opening';$('evDate').value='';$('evTitle').placeholder='اسم الفرع أو الحدث (مثلاً: افتتاح فرع المعادي)';$('evFormTitle').textContent='حدث جديد';$('evSaveBtn').textContent='+ إضافة';$('evCancelBtn').style.display='none';$('evTplWrap').style.display=''}
+function resetEvForm(){evEditId=null;pkMode='open';pkMsg='';$('evTitle').value='';$('evPlace').value='';$('evPrep').value=5;$('evType').value='opening';$('evDate').value='';$('evTitle').placeholder='اسم الفرع أو الحدث (مثلاً: افتتاح فرع المعادي)';$('evFormTitle').textContent='حدث جديد';$('evSaveBtn').textContent='+ إضافة';$('evCancelBtn').style.display='none';$('evTplWrap').style.display=''}
 function cancelEvEdit(){resetEvForm();renderEvents()}
 function editEvent(id){const e=events.find(x=>x.id===id);if(!e)return;evEditId=id;
 $('evTitle').value=e.title;$('evType').value=e.type;$('evDate').value=e.date;$('evPlace').value=e.place||'';$('evPrep').value=e.prep;
 $('evFormTitle').textContent='تعديل: '+e.title;$('evSaveBtn').textContent='حفظ التعديل';$('evCancelBtn').style.display='';$('evTplWrap').style.display='none';
-$('evForm').scrollIntoView({behavior:'smooth',block:'center'});$('evTitle').focus()}
+pkY=null;pkMode='open';pkMsg='';renderEvents();$('evForm').scrollIntoView({behavior:'smooth',block:'center'});$('evTitle').focus()}
 function saveEvent(){const title=$('evTitle').value.trim(),date=$('evDate').value,type=$('evType').value,place=$('evPlace').value.trim();
 let prep=parseInt($('evPrep').value,10);if(isNaN(prep))prep=5;prep=Math.max(0,Math.min(14,prep));
 if(!title){$('evTitle').focus();$('evTitle').placeholder='اكتب اسم الفرع أو الحدث الأول';return}
-if(!date){$('evDate').focus();return}
+if(!date){pkMsg='⚠ اختار يوم '+(EVT[type]||EVT.event).word+' من الخريطة الأول.';renderEvents();$('evMap').scrollIntoView({behavior:'smooth',block:'center'});return}
 if(evEditId!=null){const old=events.find(x=>x.id===evEditId);
 if(old){const delta=dayDiff(date,old.date);if(delta){tasks=tasks.map(t=>t.eventId===old.id?{...t,date:shiftD(t.date,delta)}:t);write('tasks',tasks)}
 events=events.map(x=>x.id===old.id?{...x,title,date,type,place,prep}:x);write('events',events);evSel=old.id}}
@@ -733,13 +780,46 @@ const cols=days.map(ds=>{const k=dayDiff(e.date,ds),l=tasks.filter(t=>t.eventId=
 label=k===0?'🎉 يوم '+info.word:(k===1?'قبل '+info.word+' بيوم':'قبل '+info.word+' بـ '+k+' أيام');
 return `<div class="ev-day ${k===0?'open':''} ${ds===today()?'today':''} ${ds<today()?'past':''}"><div class="ev-day-head"><div><b>${label}</b><span>${esc(dateText(ds))}${ds===today()?' · النهارده':''}</span></div>${l.length?`<small>${dn}/${l.length}</small>`:''}</div><div class="ev-tasks">${l.map(evTaskHTML).join('')||'<div class="ev-none">مفيش مهام</div>'}</div><input class="field ev-add" data-evadd="${ds}" placeholder="+ أضف مهمة" onkeydown="if(event.key===\'Enter\')addEvTask(${e.id},\'${ds}\',this)"></div>`}).join('');
 return hero+`<div class="ev-days">${cols}</div>`}
-function renderEvents(){const sorted=[...events].sort((a,b)=>a.date.localeCompare(b.date));
+function renderEvents(){renderPicker();const sorted=[...events].sort((a,b)=>a.date.localeCompare(b.date));
 let sel=events.find(x=>x.id===evSel);if(!sel){sel=sorted.find(e=>e.date>=today())||sorted[sorted.length-1]||null;evSel=sel?sel.id:null}
 $('evChips').innerHTML=sorted.map(e=>`<button class="ev-chip ${sel&&e.id===sel.id?'on':''} ${e.date<today()?'past':''}" onclick="evSel=${e.id};render()">${evInfo(e).icon} ${esc(e.title)}<small>${esc(e.date)}</small></button>`).join('');
 $('evDash').innerHTML=sel?evDashHTML(sel):'<div class="empty">لسه مفيش أحداث. سجّل أول افتتاح أو حدث من الفورم اللي فوق وهتلاقي هنا العدّاد والأيام بتاعته.</div>';
-if(!$('evDate').value&&evEditId==null)$('evDate').value=shiftD(today(),7);
 const up=sorted.filter(e=>e.date>=today()).slice(0,2);
 $('dashEvent').innerHTML=up.map(e=>{const st=evStats(e),cd=evCountdown(e);return `<button class="ev-mini" onclick="evSel=${e.id};showPage('events');render()"><div class="ev-mini-main"><b>${evInfo(e).icon} ${esc(e.title)}</b><small>${esc(dateLong(e.date))} · ${cd.phase}</small><div class="progress"><span style="width:${st.pct}%"></span></div></div><div class="ev-mini-count"><b>${cd.big}</b><span>${cd.label}</span></div></button>`}).join('')}
+
+/* ===== خريطة الشهر لاختيار الحدث ===== */
+let pkY=null,pkM=null,pkMode='open',pkMsg='';
+function pkInit(){if(pkY===null){const v=$('evDate').value,d=v?new Date(v+'T12:00:00'):new Date();pkY=d.getFullYear();pkM=d.getMonth()}}
+function pkMonth(n){pkInit();if(n===0){const d=new Date();pkY=d.getFullYear();pkM=d.getMonth()}else{pkM+=n;if(pkM<0){pkM=11;pkY--}if(pkM>11){pkM=0;pkY++}}renderEvents()}
+function evDateChanged(){const v=$('evDate').value;if(v){const d=new Date(v+'T12:00:00');pkY=d.getFullYear();pkM=d.getMonth()}pkMsg='';renderEvents()}
+function evPrepStep(n){let v=parseInt($('evPrep').value,10);if(isNaN(v))v=5;$('evPrep').value=Math.max(0,Math.min(14,v+n));renderEvents()}
+function setPkMode(m){pkMode=m;pkMsg='';renderEvents()}
+function pkSelectEv(id){evSel=id;pkMsg='';render();setTimeout(()=>{const e=$('evDash');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+function pkClick(ds){
+if(pkMode==='start'){const d=$('evDate').value;
+ if(!d){pkMsg='اختار يوم الافتتاح الأول (الوضع ①).';renderEvents();return}
+ const k=dayDiff(d,ds);
+ if(k<0||k>14){pkMsg='بداية التجهيز لازم تكون قبل يوم الافتتاح، وبحد أقصى 14 يوم.';renderEvents();return}
+ $('evPrep').value=k;pkMsg='';renderEvents();return}
+$('evDate').value=ds;pkMsg='';renderEvents()}
+function renderPicker(){pkInit();
+const y=pkY,m=pkM,n=new Date(y,m+1,0).getDate(),ym=y+'-'+pad(m+1),draft=$('evDate').value,pvRaw=parseInt($('evPrep').value,10),pv=Math.max(0,Math.min(14,isNaN(pvRaw)?0:pvRaw)),info=EVT[$('evType').value]||EVT.event;
+$('pkTitle').textContent=new Date(y,m,1).toLocaleDateString('ar-EG',{month:'long',year:'numeric'});
+$('pkModeHint').textContent=pkMode==='open'?'اضغط على اليوم اللي هيبقى فيه '+info.word+'.':'اضغط على أول يوم تجهيز، وأيام التجهيز هتتلون لحد '+info.word+'.';
+$('pkMode').innerHTML=[['open','① يوم '+info.word],['start','② بداية التجهيز']].map(([k,t])=>`<button class="${pkMode===k?'on':''}" onclick="setPkMode('${k}')">${t}</button>`).join('');
+$('pkHead').innerHTML=WDS.map((w,i)=>`<span><b class="fl">${w}</b><b class="sh">${['س','ح','ن','ث','ر','خ','ج'][i]}</b></span>`).join('');
+let h='';const off=(new Date(y,m,1).getDay()+1)%7;for(let i=0;i<off;i++)h+='<div class="pk-cell blank"></div>';
+for(let d=1;d<=n;d++){const ds=ym+'-'+pad(d);let cls='pk-cell',tags='';
+ if(ds===today())cls+=' today';if(ds<today())cls+=' past';
+ for(const e of events){if(e.id===evEditId)continue;const k=dayDiff(e.date,ds);
+  if(k===0)tags+=`<span class="pk-tag evopen" onclick="event.stopPropagation();pkSelectEv(${e.id})" title="${esc(e.title)}">★ ${esc(e.title)}</span>`;
+  else if(k>0&&k<=(e.prep||0))tags+=`<span class="pk-tag ev" onclick="event.stopPropagation();pkSelectEv(${e.id})" title="${esc(e.title)}">⏳ ${esc(e.title)}</span>`}
+ if(draft){const k=dayDiff(draft,ds);
+  if(k===0){cls+=' pk-open';tags+=`<span class="pk-tag open">🎉 ${info.word}</span>`}
+  else if(k>0&&k<=pv){cls+=' pk-prep';tags+=`<span class="pk-tag prep">⏳ ${k===1?'يوم قبله':k+' أيام قبله'}</span>`}}
+ h+=`<div class="${cls}" role="button" tabindex="0" onclick="pkClick('${ds}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pkClick('${ds}')}" aria-label="${esc(dateText(ds))}"><span class="n">${d}</span>${tags}</div>`}
+$('pkGrid').innerHTML=h;$('pkNote').textContent=pkMsg;
+$('evSummary').innerHTML=draft?`<b>${info.word}:</b> ${esc(dateLong(draft))}<br>`+(pv?`<b>التجهيز:</b> من ${esc(dateText(shiftD(draft,-pv)))} (${pv} ${pv===1?'يوم':'أيام'} قبله)`:'من غير أيام تجهيز'):'لسه ما اخترتش اليوم — اضغط على يوم '+info.word+' في الخريطة.'}
 
 function saveNotes(){localStorage.setItem('workspace_notes',$('notesText').value);$('saveStatus').textContent='تم حفظ ملاحظاتك في حسابك ✓';if(window.cloudSave)window.cloudSave();}
 let selectedDay=null;
