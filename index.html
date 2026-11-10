@@ -288,6 +288,60 @@ body:not(.authed) #dayModal{display:none!important}
 @media(max-width:700px){.tm-grid{grid-template-columns:1fr 1fr}.tm-foot{padding:12px 16px}.tm-foot .btn{flex:1}}
 body:not(.authed) #taskModal{display:none!important}
 
+/* ===== الافتتاحات والأحداث ===== */
+.tag.ev{background:#fff4d6;color:#8a5a00}
+.ev-form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:end}
+.ev-form .wide{grid-column:span 2}
+.ev-tpl{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--ink);padding:10px 0}
+.ev-tpl input{width:17px;height:17px;accent-color:var(--blue)}
+.ev-btns{display:flex;gap:8px}
+.ev-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.ev-chip{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px 14px;font-size:13px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;color:var(--ink);text-align:right}
+.ev-chip small{color:var(--muted);font-size:11px}
+.ev-chip.on{border-color:var(--blue);background:var(--panel2)}.ev-chip.past{opacity:.6}
+.ev-hero{display:flex;justify-content:space-between;gap:22px;background:linear-gradient(135deg,#fff,var(--panel2));border:1px solid var(--line);border-right:5px solid #e0b24a;border-radius:16px;padding:22px 26px;margin-bottom:16px}
+.ev-hero-main{flex:1;min-width:0}
+.ev-hero h2{margin:8px 0 4px;font-size:22px}
+.ev-badge{display:inline-block;background:#fff4d6;color:#8a5a00;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:bold}
+.ev-meta{font-size:13px;color:var(--muted)}
+.ev-prog{margin:16px 0 14px;max-width:460px}
+.ev-prog .row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+.ev-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ev-count{text-align:center;min-width:170px;display:flex;flex-direction:column;justify-content:center;gap:2px;background:var(--blue);color:#fff;border-radius:14px;padding:16px}
+.ev-count b{font-size:44px;line-height:1.15}.ev-count span{font-size:13px}.ev-count small{font-size:11px;opacity:.85;margin-top:4px}
+.ev-days{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.ev-day{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.ev-day.open{border:2px solid #e0b24a;background:#fffbf0}
+.ev-day.open{grid-column:1/-1}
+.ev-day.open .ev-tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px 20px;align-content:start}
+.ev-day.today{box-shadow:0 0 0 2px var(--blue) inset}
+.ev-day.past:not(.open){opacity:.8}
+.ev-day-head{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.ev-day-head b{display:block;font-size:13px}
+.ev-day-head span{font-size:11px;color:var(--muted)}
+.ev-day-head small{font-size:11px;background:var(--panel2);color:var(--blue-dark);border-radius:20px;padding:1px 8px;white-space:nowrap}
+.ev-tasks{display:flex;flex-direction:column;gap:2px;flex:1}
+.ev-task{display:flex;gap:8px;align-items:flex-start;padding:4px 0}
+.ev-task input{width:16px;height:16px;accent-color:var(--blue);margin-top:4px;flex:none}
+.ev-tt{background:none;text-align:right;color:var(--ink);font-size:13px;padding:0;flex:1;line-height:1.6}
+.ev-tt:hover{color:var(--blue-dark);text-decoration:underline}
+.ev-task.done .ev-tt{text-decoration:line-through;color:#a3b0c2}
+.ev-none{font-size:12px;color:#b8c4d4;padding:4px 0}
+.ev-add{font-size:12px;padding:7px 10px}
+.ev-mini{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,#fff,#fffbf0);border:1px solid #f0d58a;border-right:5px solid #e0b24a;border-radius:14px;padding:14px 20px;margin-bottom:14px;cursor:pointer;width:100%;text-align:right;color:var(--ink)}
+.ev-mini:hover{box-shadow:0 6px 18px rgba(138,90,0,.12)}
+.ev-mini-main{flex:1;min-width:0}.ev-mini-main b{display:block;font-size:15px}.ev-mini-main small{color:var(--muted);font-size:12px}
+.ev-mini .progress{margin-top:8px;max-width:340px}
+.ev-mini-count{text-align:center;background:#fff4d6;color:#8a5a00;border-radius:12px;padding:8px 16px;min-width:110px}
+.ev-mini-count b{display:block;font-size:26px;line-height:1.2}.ev-mini-count span{font-size:11px}
+.cal-ev,.cal-prep{display:flex;align-items:center;gap:5px;border-radius:7px;padding:3px 7px;font-size:12px;line-height:1.5;overflow:hidden;white-space:nowrap}
+.cal-ev{background:#fff4d6;color:#8a5a00;border:1px solid #f0d58a;font-weight:bold}
+.cal-prep{background:#eef1fb;color:#4b5aa8;font-size:11px}
+.cal-prep small{margin-right:auto;font-size:10px;opacity:.8}
+.cal-cell.has-open{border:2px solid #e0b24a;background:linear-gradient(#fff,#fffbf0)}
+@media(max-width:1000px){.ev-form{grid-template-columns:repeat(2,minmax(0,1fr))}.ev-hero{flex-direction:column}.ev-count{flex-direction:row;justify-content:center;align-items:baseline;gap:10px;min-width:0}.ev-count b{font-size:34px}}
+@media(max-width:700px){.ev-hero{padding:16px}.ev-mini{gap:10px;padding:12px}.ev-days{grid-template-columns:1fr}}
+
 /* ===== تسجيل الدخول ===== */
 body:not(.authed) .app{display:none}
 body.authed #authScreen{display:none}
@@ -340,6 +394,7 @@ body.authed #authScreen{display:none}
   <button class="active" data-page="dashboard"><span class="ico">⌂</span><span class="nav-text">لوحة التحكم</span></button>
   <button data-page="monthly"><span class="ico">▦</span><span class="nav-text">الشهر والأيام</span></button>
   <button data-page="daily"><span class="ico">☰</span><span class="nav-text">المهام اليومية</span></button>
+  <button data-page="events"><span class="ico">★</span><span class="nav-text">الافتتاحات والأحداث</span></button>
   <div class="nav-label">الإدارة والتطوير</div>
   <button data-page="projects"><span class="ico">◫</span><span class="nav-text">المشاريع</span></button>
   <button data-page="marketing"><span class="ico">◉</span><span class="nav-text">مساحة التسويق</span></button>
@@ -358,6 +413,7 @@ body.authed #authScreen{display:none}
 <main class="main">
  <header class="topbar"><div><div class="eyebrow">مساحة عملك الشخصية</div><h1 id="pageTitle">صباح الإنجاز 👋</h1></div><div class="date-chip" id="todayLabel"></div></header>
  <section class="page active" id="dashboard">
+  <div id="dashEvent"></div>
   <div class="stats">
    <div class="stat"><div class="stat-top"><span>مهام اليوم</span><span class="stat-icon">✓</span></div><strong id="todayCount">0</strong><small>مهام مسجلة لليوم</small></div>
    <div class="stat"><div class="stat-top"><span>مهام مكتملة</span><span class="stat-icon">◉</span></div><strong id="doneCount">0</strong><small>إنجازاتك حتى الآن</small></div>
@@ -388,6 +444,22 @@ body.authed #authScreen{display:none}
   <div class="chips" id="dailyChips"></div>
   <div id="dailyList"></div>
   <div id="dailyVids"></div>
+ </section>
+ <section class="page" id="events">
+  <div class="section-title"><div><h2>الافتتاحات والأحداث المهمة</h2><p>سجّل افتتاح فرع أو حدث مهم، وجهّز له خطة أيام قبله ويوم الافتتاح نفسه، وكلها بتظهر على التقويم.</p></div></div>
+  <div class="panel" id="evForm"><div class="panel-head"><h3 id="evFormTitle">حدث جديد</h3><span class="muted">هيظهر على التقويم</span></div>
+   <div class="ev-form">
+    <input class="field wide" id="evTitle" placeholder="اسم الفرع أو الحدث (مثلاً: افتتاح فرع المعادي)">
+    <select class="field" id="evType"><option value="opening">🏪 افتتاح فرع</option><option value="event">⭐ حدث مهم</option></select>
+    <label class="tm-f"><span>تاريخ الافتتاح / الحدث</span><input class="field" id="evDate" type="date"></label>
+    <input class="field" id="evPlace" placeholder="المكان (اختياري)">
+    <label class="tm-f"><span>أيام التجهيز قبله</span><input class="field" id="evPrep" type="number" min="0" max="14" value="5"></label>
+    <label class="ev-tpl" id="evTplWrap"><input type="checkbox" id="evTpl" checked> أضف قايمة تجهيز جاهزة (تقدر تعدّلها)</label>
+    <div class="ev-btns"><button class="btn" id="evSaveBtn" onclick="saveEvent()">+ إضافة</button><button class="btn btn-light" id="evCancelBtn" style="display:none" onclick="cancelEvEdit()">إلغاء</button></div>
+   </div>
+  </div>
+  <div class="ev-chips" id="evChips"></div>
+  <div id="evDash"></div>
  </section>
  <section class="page" id="projects">
   <div class="section-title"><div><h2>المشاريع</h2><p>تابع المشاريع والأعمال اللي بتشتغل عليها.</p></div></div>
@@ -478,12 +550,12 @@ body.authed #authScreen{display:none}
 const $=id=>document.getElementById(id);
 const read=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('workspace_'+k))??d}catch{return d}};
 const write=(k,v)=>{localStorage.setItem('workspace_'+k,JSON.stringify(v));if(window.cloudSave)window.cloudSave()};
-let tasks=read('tasks'),projects=read('projects'),campaigns=read('campaigns'),ideas=read('ideas'),vids=read('vids'),calendarDate=new Date();
+let tasks=read('tasks'),projects=read('projects'),campaigns=read('campaigns'),ideas=read('ideas'),vids=read('vids'),events=read('events'),calendarDate=new Date();
 const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const dateText=d=>new Date(d+'T12:00:00').toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
 $('todayLabel').textContent=dateText(today());
 $('notesText').value=localStorage.getItem('workspace_notes')||'';
-function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(p).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));const names={dashboard:'صباح الإنجاز 👋',monthly:'الشهر والأيام',settings:'الإعدادات',projects:'المشاريع',marketing:'مساحة التسويق',ideas:'بنك الأفكار',videos:'أفكار الفيديو',daily:'المهام اليومية',notes:'الملاحظات'};$('pageTitle').textContent=names[p];}
+function showPage(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(p).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));const names={dashboard:'صباح الإنجاز 👋',monthly:'الشهر والأيام',settings:'الإعدادات',projects:'المشاريع',marketing:'مساحة التسويق',ideas:'بنك الأفكار',videos:'أفكار الفيديو',daily:'المهام اليومية',events:'الافتتاحات والأحداث',notes:'الملاحظات'};$('pageTitle').textContent=names[p];}
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>{closeDay();showPage(b.dataset.page)}));
 function quickAdd(){let title=$('quickTask').value.trim();if(!title)return;tasks.push({id:Date.now(),title,type:'daily',date:today(),priority:'medium',done:false});write('tasks',tasks);$('quickTask').value='';render();}
 function toggleTask(id){tasks=tasks.map(t=>t.id===id?{...t,done:!t.done}:t);write('tasks',tasks);render();}
@@ -570,7 +642,7 @@ tasks.push({id:Date.now(),title,type:'daily',date:dailyDate,priority:$('dyPriori
 write('tasks',tasks);$('dyTask').value='';$('dyNote').value='';render();$('dyTask').focus()}
 function fullTaskHTML(t){if(t.id===editingId)return `<div class="dt editing">${editHTML(t)}</div>`;
 const pn=projName(t.projectId),pri=t.priority==='high'?'عالية':t.priority==='low'?'منخفضة':'متوسطة';
-return `<article class="dt p-${esc(t.priority)} ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" aria-label="تم"><div class="dt-main"><h3 class="dt-title">${esc(t.title)}</h3><div class="dt-tags">${t.time?`<span class="task-meta">🕒 ${esc(t.time)}</span>`:''}${t.cat&&t.cat!=='عام'?`<span class="tag">${esc(t.cat)}</span>`:''}${pn?`<span class="tag proj">📁 ${esc(pn)}</span>`:''}<span class="tag ${esc(t.priority)}">${pri}</span>${t.done?'<span class="tag low">✓ منجزة</span>':''}</div><div class="dt-detail"><span class="dt-label">التفاصيل</span>${t.note?esc(t.note):'<span class="muted">مفيش تفاصيل مكتوبة — اضغط ✎ عشان تضيف.</span>'}</div></div><div class="dt-actions"><button class="edit-btn" onclick="editTask(${t.id})" title="تعديل">✎</button><button class="edit-btn" onclick="moveTask(${t.id},1)" title="انقلها لبكرة">⇢</button><button class="delete" onclick="removeTask(${t.id})" title="حذف">×</button></div></article>`}
+return `<article class="dt p-${esc(t.priority)} ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" aria-label="تم"><div class="dt-main"><h3 class="dt-title">${esc(t.title)}</h3><div class="dt-tags">${t.time?`<span class="task-meta">🕒 ${esc(t.time)}</span>`:''}${t.cat&&t.cat!=='عام'?`<span class="tag">${esc(t.cat)}</span>`:''}${evName(t.eventId)?`<span class="tag ev">★ ${esc(evName(t.eventId))}</span>`:''}${pn?`<span class="tag proj">📁 ${esc(pn)}</span>`:''}<span class="tag ${esc(t.priority)}">${pri}</span>${t.done?'<span class="tag low">✓ منجزة</span>':''}</div><div class="dt-detail"><span class="dt-label">التفاصيل</span>${t.note?esc(t.note):'<span class="muted">مفيش تفاصيل مكتوبة — اضغط ✎ عشان تضيف.</span>'}</div></div><div class="dt-actions"><button class="edit-btn" onclick="editTask(${t.id})" title="تعديل">✎</button><button class="edit-btn" onclick="moveTask(${t.id},1)" title="انقلها لبكرة">⇢</button><button class="delete" onclick="removeTask(${t.id})" title="حذف">×</button></div></article>`}
 function renderDaily(){const days=dailyRange(),inR=t=>days.includes(t.date);
 const flt=t=>(dFilter==='all'||(dFilter==='done')===t.done)&&(!dCat||(t.cat||'عام')===dCat)&&(!dProj||String(t.projectId)===dProj)&&(settings.showDone||!t.done);
 const all=tasks.filter(inR),dn=all.filter(t=>t.done).length,pc=all.length?Math.round(dn/all.length*100):0,vv=vids.filter(v=>days.includes(v.date));
@@ -597,7 +669,7 @@ function openTaskModal(id){const t=tasks.find(x=>x.id===id);if(!t)return;editTas
 let c=cats();if(t.cat&&!c.includes(t.cat))c.push(t.cat);
 $('tmTitle').value=t.title;$('tmNote').value=t.note||'';$('tmDate').value=t.date;$('tmTime').value=t.time||'';$('tmPri').value=t.priority||'medium';
 $('tmCat').innerHTML=opts(c,t.cat||'عام');$('tmProj').innerHTML=projOpts(t.projectId);$('tmDone').value=t.done?'1':'0';
-$('tmSub').textContent=dateText(t.date)+(t.done?' · منجزة':'');
+$('tmSub').textContent=dateText(t.date)+(t.done?' · منجزة':'')+(evName(t.eventId)?' · ★ '+evName(t.eventId):'');
 $('taskModal').classList.add('open');document.body.classList.add('modal-open');
 if(window.matchMedia('(hover:hover)').matches)setTimeout(()=>$('tmTitle').focus(),60)}
 function closeTaskModal(){editTaskId=null;$('taskModal').classList.remove('open');document.body.classList.toggle('modal-open',!!selectedDay)}
@@ -607,6 +679,67 @@ tasks=tasks.map(t=>t.id===id?{...t,title,note:$('tmNote').value.trim(),date:$('t
 write('tasks',tasks);closeTaskModal();render()}
 function moveFromModal(n){$('tmDate').value=shiftD($('tmDate').value||today(),n);saveTaskModal()}
 function deleteFromModal(){const id=editTaskId;if(id==null)return;if(!confirm('تحذف المهمة دي؟'))return;tasks=tasks.filter(t=>t.id!==id);write('tasks',tasks);closeTaskModal();render()}
+
+/* ===== الافتتاحات والأحداث المهمة ===== */
+let evSel=null,evEditId=null;
+const dayDiff=(a,b)=>Math.round((new Date(a+'T12:00:00')-new Date(b+'T12:00:00'))/864e5);
+const EVT={opening:{icon:'🏪',name:'افتتاح فرع',word:'الافتتاح'},event:{icon:'⭐',name:'حدث مهم',word:'الحدث'}};
+const evInfo=e=>EVT[e.type]||EVT.event;
+const evName=id=>{const e=events.find(x=>x.id===id);return e?e.title:''};
+const EVTPL={
+ opening:{5:['تأكيد طلبات الموردين والخامات','مراجعة الميزانية النهائية للافتتاح'],4:['تدريب الفريق على المنيو وخطوات الخدمة','تجهيز تصاميم الإعلانات والبوستات'],3:['فحص وتجربة الأجهزة والمعدات','تنظيف وتجهيز المكان'],2:['تركيب اللافتات والديكور','مراجعة الأسعار والمنيو المطبوع'],1:['تشغيل تجريبي كامل (Dry run)','نشر تذكير الافتتاح على السوشيال ميديا','تجهيز الكاش وأجهزة الدفع'],0:['فتح الأبواب واستقبال الزباين 🎉','تصوير وتغطية الافتتاح (ستوري وريلز)','متابعة الزباين وجمع الملاحظات']},
+ event:{5:['تحديد الهدف والمسؤوليات','تأكيد الميزانية'],4:['تجهيز المحتوى والمواد المطلوبة','التواصل مع الشركاء والموردين'],3:['تأكيد الحضور والمشاركين'],2:['مراجعة المكان والتجهيزات'],1:['بروفة نهائية','إرسال تذكير للحضور'],0:['تنفيذ الحدث','تصوير وتغطية الحدث','متابعة ما بعد الحدث']}
+};
+function addEvTemplate(e){const tpl=EVTPL[e.type]||EVTPL.event;let id=Date.now()+1;const add=[];
+for(let k=Math.min(e.prep,5);k>=0;k--)(tpl[k]||[]).forEach(title=>add.push({id:id++,title,type:'daily',date:shiftD(e.date,-k),priority:k===0?'high':'medium',cat:'عام',projectId:null,eventId:e.id,note:'',time:'',done:false}));
+tasks=tasks.concat(add);write('tasks',tasks)}
+function addTplTo(id){const e=events.find(x=>x.id===id);if(e){addEvTemplate(e);render()}}
+function evStats(e){const t=tasks.filter(x=>x.eventId===e.id),d=t.filter(x=>x.done).length;return{total:t.length,done:d,pct:t.length?Math.round(d/t.length*100):0}}
+function evCountdown(e){const k=dayDiff(e.date,today()),w=evInfo(e).word;
+if(k>1)return{big:String(k),label:'يوم متبقي على '+w,phase:k<=e.prep?'⏳ إحنا في مرحلة التجهيز':'لسه قبل بدء التجهيز'};
+if(k===1)return{big:'1',label:'يوم — بكرة '+w+'!',phase:'⏳ آخر يوم تجهيز'};
+if(k===0)return{big:'🎉',label:'النهارده يوم '+w,phase:'بالتوفيق!'};
+return{big:String(-k),label:'يوم عدّى على '+w,phase:'اتنفّذ ✓'}}
+function evBadges(ds){let html='',n=0,open=false;
+for(const e of events){const k=dayDiff(e.date,ds);
+if(k===0){open=true;n++;html+=`<span class="cal-ev" title="${esc(e.title)}">★ <span class="cal-tt">${esc(e.title)}</span></span>`}
+else if(k>0&&k<=(e.prep||0)){n++;html+=`<span class="cal-prep" title="${esc(e.title)}">⏳ <span class="cal-tt">${esc(e.title)}</span><small>${k===1?'قبله بيوم':'قبله بـ'+k}</small></span>`}}
+return{html,n,open}}
+function resetEvForm(){evEditId=null;$('evTitle').value='';$('evPlace').value='';$('evPrep').value=5;$('evType').value='opening';$('evDate').value='';$('evTitle').placeholder='اسم الفرع أو الحدث (مثلاً: افتتاح فرع المعادي)';$('evFormTitle').textContent='حدث جديد';$('evSaveBtn').textContent='+ إضافة';$('evCancelBtn').style.display='none';$('evTplWrap').style.display=''}
+function cancelEvEdit(){resetEvForm();renderEvents()}
+function editEvent(id){const e=events.find(x=>x.id===id);if(!e)return;evEditId=id;
+$('evTitle').value=e.title;$('evType').value=e.type;$('evDate').value=e.date;$('evPlace').value=e.place||'';$('evPrep').value=e.prep;
+$('evFormTitle').textContent='تعديل: '+e.title;$('evSaveBtn').textContent='حفظ التعديل';$('evCancelBtn').style.display='';$('evTplWrap').style.display='none';
+$('evForm').scrollIntoView({behavior:'smooth',block:'center'});$('evTitle').focus()}
+function saveEvent(){const title=$('evTitle').value.trim(),date=$('evDate').value,type=$('evType').value,place=$('evPlace').value.trim();
+let prep=parseInt($('evPrep').value,10);if(isNaN(prep))prep=5;prep=Math.max(0,Math.min(14,prep));
+if(!title){$('evTitle').focus();$('evTitle').placeholder='اكتب اسم الفرع أو الحدث الأول';return}
+if(!date){$('evDate').focus();return}
+if(evEditId!=null){const old=events.find(x=>x.id===evEditId);
+if(old){const delta=dayDiff(date,old.date);if(delta){tasks=tasks.map(t=>t.eventId===old.id?{...t,date:shiftD(t.date,delta)}:t);write('tasks',tasks)}
+events=events.map(x=>x.id===old.id?{...x,title,date,type,place,prep}:x);write('events',events);evSel=old.id}}
+else{const e={id:Date.now(),title,date,type,place,prep};events.push(e);write('events',events);evSel=e.id;if($('evTpl').checked)addEvTemplate(e)}
+resetEvForm();render()}
+function deleteEvent(id){const e=events.find(x=>x.id===id);if(!e)return;const n=tasks.filter(t=>t.eventId===id).length;
+if(!confirm('تحذف "'+e.title+'"'+(n?' ومعاه '+n+' مهمة مرتبطة بيه':'')+'؟'))return;
+tasks=tasks.filter(t=>t.eventId!==id);events=events.filter(x=>x.id!==id);write('tasks',tasks);write('events',events);if(evSel===id)evSel=null;render()}
+function addEvTask(id,ds,inp){const title=inp.value.trim();if(!title)return;
+tasks.push({id:Date.now(),title,type:'daily',date:ds,priority:'medium',cat:'عام',projectId:null,eventId:id,note:'',time:'',done:false});write('tasks',tasks);render();
+setTimeout(()=>{const n=document.querySelector('[data-evadd="'+ds+'"]');if(n)n.focus()},0)}
+function evTaskHTML(t){return `<div class="ev-task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" aria-label="تم"><button class="ev-tt" onclick="editTask(${t.id})" title="تعديل المهمة">${t.time?'🕒 '+esc(t.time)+' · ':''}${esc(t.title)}${t.note?' 📝':''}</button></div>`}
+function evDashHTML(e){const info=evInfo(e),st=evStats(e),cd=evCountdown(e),days=[];for(let k=e.prep;k>=0;k--)days.push(shiftD(e.date,-k));
+const hero=`<div class="ev-hero"><div class="ev-hero-main"><span class="ev-badge">${info.icon} ${info.name}</span><h2>${esc(e.title)}</h2><div class="ev-meta">${esc(dateLong(e.date))}${e.place?' · 📍 '+esc(e.place):''}</div><div class="ev-prog"><div class="row"><span>تقدم التجهيز</span><b>${st.done} من ${st.total} مهمة (${st.pct}%)</b></div><div class="progress"><span style="width:${st.pct}%"></span></div></div><div class="ev-actions"><button class="btn btn-light btn-sm" onclick="editEvent(${e.id})">✎ تعديل</button>${st.total===0?`<button class="btn btn-light btn-sm" onclick="addTplTo(${e.id})">+ قايمة تجهيز جاهزة</button>`:''}<button class="btn btn-danger btn-sm" onclick="deleteEvent(${e.id})">حذف</button></div></div><div class="ev-count"><b>${cd.big}</b><span>${cd.label}</span><small>${cd.phase}</small></div></div>`;
+const cols=days.map(ds=>{const k=dayDiff(e.date,ds),l=tasks.filter(t=>t.eventId===e.id&&t.date===ds).sort(sortT),dn=l.filter(t=>t.done).length,
+label=k===0?'🎉 يوم '+info.word:(k===1?'قبل '+info.word+' بيوم':'قبل '+info.word+' بـ '+k+' أيام');
+return `<div class="ev-day ${k===0?'open':''} ${ds===today()?'today':''} ${ds<today()?'past':''}"><div class="ev-day-head"><div><b>${label}</b><span>${esc(dateText(ds))}${ds===today()?' · النهارده':''}</span></div>${l.length?`<small>${dn}/${l.length}</small>`:''}</div><div class="ev-tasks">${l.map(evTaskHTML).join('')||'<div class="ev-none">مفيش مهام</div>'}</div><input class="field ev-add" data-evadd="${ds}" placeholder="+ أضف مهمة" onkeydown="if(event.key===\'Enter\')addEvTask(${e.id},\'${ds}\',this)"></div>`}).join('');
+return hero+`<div class="ev-days">${cols}</div>`}
+function renderEvents(){const sorted=[...events].sort((a,b)=>a.date.localeCompare(b.date));
+let sel=events.find(x=>x.id===evSel);if(!sel){sel=sorted.find(e=>e.date>=today())||sorted[sorted.length-1]||null;evSel=sel?sel.id:null}
+$('evChips').innerHTML=sorted.map(e=>`<button class="ev-chip ${sel&&e.id===sel.id?'on':''} ${e.date<today()?'past':''}" onclick="evSel=${e.id};render()">${evInfo(e).icon} ${esc(e.title)}<small>${esc(e.date)}</small></button>`).join('');
+$('evDash').innerHTML=sel?evDashHTML(sel):'<div class="empty">لسه مفيش أحداث. سجّل أول افتتاح أو حدث من الفورم اللي فوق وهتلاقي هنا العدّاد والأيام بتاعته.</div>';
+if(!$('evDate').value&&evEditId==null)$('evDate').value=shiftD(today(),7);
+const up=sorted.filter(e=>e.date>=today()).slice(0,2);
+$('dashEvent').innerHTML=up.map(e=>{const st=evStats(e),cd=evCountdown(e);return `<button class="ev-mini" onclick="evSel=${e.id};showPage('events');render()"><div class="ev-mini-main"><b>${evInfo(e).icon} ${esc(e.title)}</b><small>${esc(dateLong(e.date))} · ${cd.phase}</small><div class="progress"><span style="width:${st.pct}%"></span></div></div><div class="ev-mini-count"><b>${cd.big}</b><span>${cd.label}</span></div></button>`}).join('')}
 
 function saveNotes(){localStorage.setItem('workspace_notes',$('notesText').value);$('saveStatus').textContent='تم حفظ ملاحظاتك في حسابك ✓';if(window.cloudSave)window.cloudSave();}
 let selectedDay=null;
@@ -627,8 +760,8 @@ let h='';const off=(new Date(y,m,1).getDay()+1)%7;for(let i=0;i<off;i++)h+='<spa
 for(let d=1;d<=n;d++){let ds=ym+'-'+pad(d);
 if(settings.hidePast&&ym===today().slice(0,7)&&ds<today()){h+='<span class="cal-blank"></span>';continue}
 let l=tasks.filter(t=>t.date===ds).sort((a,b)=>(a.time||'99').localeCompare(b.time||'99')),dn=l.filter(t=>t.done).length,vc=vids.filter(v=>v.date===ds).length,wd=new Date(ds+'T12:00:00').toLocaleDateString('ar-EG',{weekday:'long'}),pc=l.length?Math.round(dn/l.length*100):0;
-const chips=l.slice(0,3).map(t=>`<span class="cal-task p-${esc(t.priority)} ${t.done?'done':''}"><i></i><span class="cal-tt">${esc(t.title)}</span></span>`).join(''),more=l.length>3?`<span class="cal-more">+${l.length-3} أخرى</span>`:'';
-h+=`<button class="cal-cell ${ds===today()?'today':''} ${l.length&&dn===l.length?'alldone':''}" onclick="openDay('${ds}')" aria-label="${esc(dateText(ds))}"><span class="cal-top"><span class="cal-num">${d}</span><span class="cal-wd">${wd}</span>${vc?`<span class="cal-vid">▶ ${vc}</span>`:''}</span><span class="cal-tasks">${chips||'<span class="cal-empty-txt">+ إضافة مهمة</span>'}${more}</span>${l.length?`<span class="cal-foot"><span class="progress"><span style="width:${pc}%"></span></span><small>${dn}/${l.length}</small></span>`:''}</button>`}
+const evb=evBadges(ds),mx=Math.max(1,3-evb.n),chips=l.slice(0,mx).map(t=>`<span class="cal-task p-${esc(t.priority)} ${t.done?'done':''}"><i></i><span class="cal-tt">${esc(t.title)}</span></span>`).join(''),more=l.length>mx?`<span class="cal-more">+${l.length-mx} أخرى</span>`:'';
+h+=`<button class="cal-cell ${ds===today()?'today':''} ${l.length&&dn===l.length?'alldone':''}${evb.open?' has-open':''}" onclick="openDay('${ds}')" aria-label="${esc(dateText(ds))}"><span class="cal-top"><span class="cal-num">${d}</span><span class="cal-wd">${wd}</span>${vc?`<span class="cal-vid">▶ ${vc}</span>`:''}</span><span class="cal-tasks">${evb.html}${chips||(evb.n?'':'<span class="cal-empty-txt">+ إضافة مهمة</span>')}${more}</span>${l.length?`<span class="cal-foot"><span class="progress"><span style="width:${pc}%"></span></span><small>${dn}/${l.length}</small></span>`:''}</button>`}
 $('monthDays').innerHTML=h;
 $('dayModal').classList.toggle('open',!!selectedDay);document.body.classList.toggle('modal-open',!!selectedDay||editTaskId!=null);
 if(selectedDay)renderDay();}
@@ -649,7 +782,7 @@ const openNotes=new Set();
 function toggleNote(id){openNotes.has(id)?openNotes.delete(id):openNotes.add(id);render()}
 function taskHTML(t,showDate){if(t.id===editingId)return editHTML(t);
 const open=openNotes.has(t.id),pn=projName(t.projectId),pri=t.priority==='high'?'عالية':t.priority==='low'?'منخفضة':'متوسطة';
-const tags=`${showDate?`<span class="task-meta">${esc(t.date)}</span>`:''}${t.time?`<span class="task-meta">🕒 ${esc(t.time)}</span>`:''}${t.cat&&t.cat!=='عام'?`<span class="tag">${esc(t.cat)}</span>`:''}${pn?`<span class="tag proj">📁 ${esc(pn)}</span>`:''}<span class="tag ${esc(t.priority)}">${pri}</span>`;
+const tags=`${showDate?`<span class="task-meta">${esc(t.date)}</span>`:''}${t.time?`<span class="task-meta">🕒 ${esc(t.time)}</span>`:''}${t.cat&&t.cat!=='عام'?`<span class="tag">${esc(t.cat)}</span>`:''}${evName(t.eventId)?`<span class="tag ev">★ ${esc(evName(t.eventId))}</span>`:''}${pn?`<span class="tag proj">📁 ${esc(pn)}</span>`:''}<span class="tag ${esc(t.priority)}">${pri}</span>`;
 return `<div class="task ${t.done?'done':''}"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${t.id})" aria-label="تم"><div class="task-body"><span class="task-title">${esc(t.title)}</span><div class="task-tags">${tags}</div>${t.note?`<button class="detail-toggle" onclick="toggleNote(${t.id})">${open?'إخفاء التفاصيل ▴':'عرض التفاصيل ▾'}</button>`:''}${t.note&&open?`<div class="task-detail">${esc(t.note)}</div>`:''}</div><button class="edit-btn" onclick="editTask(${t.id})" title="تعديل">✎</button><button class="delete" onclick="removeTask(${t.id})" title="حذف">×</button></div>`}
 function editHTML(t){let c=cats();if(t.cat&&!c.includes(t.cat))c.push(t.cat);return `<div class="task edit"><div class="edit-grid"><input class="field wide" data-f="title" value="${esc(t.title)}"><input class="field" data-f="date" type="date" value="${t.date}"><select class="field" data-f="pri">${opts(PRI,t.priority)}</select><select class="field" data-f="cat">${opts(c,t.cat||'عام')}</select><select class="field" data-f="proj">${projOpts(t.projectId)}</select><input class="field" data-f="time" type="time" value="${t.time||''}"><textarea class="field wide" data-f="note" rows="2" placeholder="تفاصيل المهمة (اختياري)">${esc(t.note||'')}</textarea></div><div class="edit-actions"><button class="btn" onclick="saveEdit(${t.id},this)">حفظ</button><button class="btn btn-light" onclick="editTask(null)">إلغاء</button><button class="btn btn-light" onclick="moveTask(${t.id},1)">انقلها لبكرة</button></div></div>`}
 function saveEdit(id,btn){const b=btn.closest('.task.edit'),g=f=>b.querySelector('[data-f="'+f+'"]');tasks=tasks.map(t=>t.id===id?{...t,title:g('title').value.trim()||t.title,date:g('date').value||t.date,priority:g('pri').value,cat:g('cat').value,projectId:g('proj').value?Number(g('proj').value):null,time:g('time').value,note:g('note').value.trim()}:t);write('tasks',tasks);editingId=null;render();}
@@ -664,12 +797,12 @@ const dv=vids.filter(v=>v.date===selectedDay);$('dayVids').innerHTML=dv.length?d
 function applySettings(){const P={blue:['#4a86c7','#2f5f9e','#eaf2fb','#f3f7fc'],sky:['#3aa0c9','#23769c','#e6f4fa','#f2f9fc'],indigo:['#5b78c7','#3b53a0','#ebeffb','#f4f6fc'],slate:['#6b8299','#435a70','#ebf0f4','#f5f7f9']},p=P[settings.accent]||P.blue,r=document.documentElement.style;r.setProperty('--blue',p[0]);r.setProperty('--blue-dark',p[1]);r.setProperty('--panel2',p[2]);r.setProperty('--bg',p[3]);document.body.style.zoom=settings.size;
 $('swatches').innerHTML=Object.keys(P).map(k=>`<button class="swatch ${settings.accent===k?'on':''}" style="background:${P[k][0]}" onclick="setOpt('accent','${k}')"></button>`).join('');$('setSize').value=settings.size;$('setHide').checked=!!settings.hidePast;$('setDone').checked=settings.showDone!==false;$('setCats').value=settings.cats;$('dayCat').innerHTML=opts(cats(),'عام');$('dyCat').innerHTML=opts(cats(),'عام');}
 function setOpt(k,v){settings[k]=v;write('settings',settings);applySettings();render();}
-function exportData(){let d={tasks,projects,campaigns,ideas,vids,notes:$('notesText').value,settings},a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='workspace-backup.json';a.click();}
-function importData(i){let f=i.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);['tasks','projects','campaigns','ideas','vids','settings'].forEach(k=>{if(d[k])localStorage.setItem('workspace_'+k,JSON.stringify(d[k]))});if(d.notes!=null)localStorage.setItem('workspace_notes',d.notes);loadState();if(window.cloudSave)window.cloudSave();alert('تم الاستيراد ✓')}catch{alert('الملف ده مش نسخة احتياطية صالحة.')}};r.readAsText(f);}
+function exportData(){let d={tasks,projects,campaigns,ideas,vids,events,notes:$('notesText').value,settings},a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(d)],{type:'application/json'}));a.download='workspace-backup.json';a.click();}
+function importData(i){let f=i.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);['tasks','projects','campaigns','ideas','vids','events','settings'].forEach(k=>{if(d[k])localStorage.setItem('workspace_'+k,JSON.stringify(d[k]))});if(d.notes!=null)localStorage.setItem('workspace_notes',d.notes);loadState();if(window.cloudSave)window.cloudSave();alert('تم الاستيراد ✓')}catch{alert('الملف ده مش نسخة احتياطية صالحة.')}};r.readAsText(f);}
 function resetAll(){if(confirm('هتتمسح كل بياناتك من الجهاز ومن حسابك. متأكد؟')){Object.keys(localStorage).filter(k=>k.startsWith('workspace_')).forEach(k=>localStorage.removeItem(k));loadState();if(window.cloudSave)window.cloudSave()}}
-function render(){renderTasks();renderCards();renderMonth();renderDaily();}
+function render(){renderTasks();renderCards();renderMonth();renderDaily();renderEvents();}
 // إعادة تحميل الحالة كلها من localStorage (بتتنادى بعد تسجيل الدخول/الخروج)
-function loadState(){tasks=read('tasks');projects=read('projects');campaigns=read('campaigns');ideas=read('ideas');vids=read('vids');editingVid=null;openProj=null;settings={...DEFAULT_SETTINGS,...read('settings',{})};$('notesText').value=localStorage.getItem('workspace_notes')||'';selectedDay=null;editingId=null;dailyDate=today();applySettings();render();showPage('dashboard');}
+function loadState(){tasks=read('tasks');projects=read('projects');campaigns=read('campaigns');ideas=read('ideas');vids=read('vids');events=read('events');evSel=null;evEditId=null;editingVid=null;openProj=null;settings={...DEFAULT_SETTINGS,...read('settings',{})};$('notesText').value=localStorage.getItem('workspace_notes')||'';selectedDay=null;editingId=null;dailyDate=today();applySettings();render();showPage('dashboard');}
 $('quickTask').addEventListener('keydown',e=>{if(e.key==='Enter')quickAdd()});$('dayTask').addEventListener('keydown',e=>{if(e.key==='Enter')addDayTask()});$('dvTitle').addEventListener('keydown',e=>{if(e.key==='Enter')addVid('dv')});$('dyTask').addEventListener('keydown',e=>{if(e.key==='Enter')addDailyTask()});$('vTitle').addEventListener('keydown',e=>{if(e.key==='Enter')addVid('v')});
 applySettings();render();
 </script>
@@ -694,7 +827,7 @@ import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmai
 import {getFirestore,doc,getDoc,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const $=id=>document.getElementById(id);
-const KEYS=['tasks','projects','campaigns','ideas','vids','settings'];
+const KEYS=['tasks','projects','campaigns','ideas','vids','events','settings'];
 let mode='in', user=null, saveTimer=null, dirty=false;
 
 function msg(text,type='err'){const m=$('authMsg');m.className='auth-msg '+type;m.textContent=text;if(!text)m.className='auth-msg'}
